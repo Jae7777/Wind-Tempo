@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="Wind Tempo"
+run/main_scene="uid://dk7risr2o686o"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"

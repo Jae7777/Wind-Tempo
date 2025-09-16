@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dk7risr2o686o"]
+
+[ext_resource type="Script" uid="uid://d17gpmgqn8e3w" path="res://CoreGameplay/NoteSpawner.gd" id="1_kti2m"]
+[ext_resource type="PackedScene" uid="uid://btjm4pfvpbwh6" path="res://CoreGameplay/Note.tscn" id="2_tc5u7"]
+
+[node name="Main" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NoteSpawner" type="Node2D" parent="."]
+script = ExtResource("1_kti2m")
+note_scene = ExtResource("2_tc5u7")

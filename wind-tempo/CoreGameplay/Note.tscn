@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://btjm4pfvpbwh6"]
+
+[ext_resource type="Script" uid="uid://bmhaiyecx3wdx" path="res://CoreGameplay/Note.gd" id="1_c8uvb"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c8uvb"]
+
+[node name="Note" type="Node2D"]
+script = ExtResource("1_c8uvb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(38.75, 46.25)
+scale = Vector2(78.5, 93.5)
+texture = SubResource("PlaceholderTexture2D_c8uvb")
