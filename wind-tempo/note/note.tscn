@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6gwnw1u84wfa"]
+
+[ext_resource type="Script" path="res://note/note.gd" id="1_xcyql"]
+
+[node name="Note" type="ColorRect"]
+custom_minimum_size = Vector2(100, 30)
+color = Color(0.862745, 0.341176, 0.964706, 1)
+script = ExtResource("1_xcyql")
