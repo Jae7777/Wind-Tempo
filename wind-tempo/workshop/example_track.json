@@ -1,63 +1,63 @@
 {
-  "metadata": {
-    "title": "Wind Tempo",
-    "artist": "The Godotines",
-    "charter": "Player One",
-    "difficulty": "Expert"
-  },
-  "audio": {
-    "filePath": "res://workshop/tracks/wind_tempo/bach-c.ogg",
-    "previewStartTime": 25.5
-  },
-  "sync": {
-    "offset": 0.0,
-    "timingPoints": [
-      {
-        "beat": 0,
-        "bpm": 140
-      },
-      {
-        "beat": 64,
-        "bpm": 150
-      }
-    ]
-  },
-  "notes": [
-    {
-      "beat": 4,
-      "lane": 0,
-      "duration": 0
-    },
-    {
-      "beat": 5,
-      "lane": 1,
-      "duration": 0
-    },
-    {
-      "beat": 6,
-      "lane": 2,
-      "duration": 1
-    },
-    {
-      "beat": 8,
-      "lane": 3,
-      "duration": 0
-    },
-    {
-      "beat": 9,
-      "lane": 2,
-      "duration": 0
-    },
-    {
-      "beat": 10,
-      "lane": 1,
-      "duration": 2
-    }
-  ],
-  "events": {
-    "sections": [
-        { "beat": 0, "name": "Intro" },
-        { "beat": 32, "name": "Verse" }
-    ]
-  }
+	"metadata": {
+		"title": "Wind Tempo",
+		"artist": "The Godotines",
+		"charter": "Player One",
+		"difficulty": "Expert"
+	},
+	"audio": {
+		"filePath": "res://workshop/tracks/wind_tempo/bach-c.ogg",
+		"previewStartTime": 25.5
+	},
+	"sync": {
+		"offset": 0.0,
+		"timingPoints": [
+			{
+				"beat": 0,
+				"bpm": 140
+			},
+			{
+				"beat": 64,
+				"bpm": 150
+			}
+		]
+	},
+	"notes": [
+		{
+			"beat": 4,
+			"lane": 0,
+			"duration": 0
+		},
+		{
+			"beat": 5,
+			"lane": 1,
+			"duration": 0
+		},
+		{
+			"beat": 6,
+			"lane": 2,
+			"duration": 1
+		},
+		{
+			"beat": 8,
+			"lane": 3,
+			"duration": 0
+		},
+		{
+			"beat": 9,
+			"lane": 2,
+			"duration": 0
+		},
+		{
+			"beat": 10,
+			"lane": 1,
+			"duration": 2
+		}
+	],
+	"events": {
+		"sections": [
+				{ "beat": 0, "name": "Intro" },
+				{ "beat": 32, "name": "Verse" }
+		]
+	}
 }

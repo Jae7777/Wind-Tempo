@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5s8j2f3n3j2s"]
+[gd_scene load_steps=5 format=3 uid="uid://c5s8j2f3n3j2s"]
 
-[ext_resource type="Script" path="res://editor/editor.gd" id="1_ff1g8"]
+[ext_resource type="Script" uid="uid://c183x5ewdo6dj" path="res://editor/editor.gd" id="1_ff1g8"]
+[ext_resource type="Theme" uid="uid://dvj2wa25413ak" path="res://editor/WindTempoTheme.tres" id="2_fjngd"]
+
+[sub_resource type="Theme" id="Theme_ycap1"]
+
+[sub_resource type="Theme" id="Theme_fjngd"]
 
 [node name="Editor" type="Control"]
 layout_mode = 3
@@ -21,9 +26,11 @@ grow_vertical = 2
 
 [node name="MenuBar" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_fjngd")
 
 [node name="LoadAudioButton" type="Button" parent="VBoxContainer/MenuBar"]
 layout_mode = 2
+theme = ExtResource("2_fjngd")
 text = "Load Audio"
 
 [node name="LoadTrackButton" type="Button" parent="VBoxContainer/MenuBar"]
@@ -71,6 +78,7 @@ layout_mode = 2
 
 [node name="PlayButton" type="Button" parent="VBoxContainer/Playback"]
 layout_mode = 2
+theme = SubResource("Theme_ycap1")
 text = "Play"
 
 [node name="PauseButton" type="Button" parent="VBoxContainer/Playback"]
@@ -91,10 +99,11 @@ size_flags_vertical = 3
 follow_focus = true
 
 [node name="Timeline" type="Control" parent="VBoxContainer/TimelineContainer"]
+custom_minimum_size = Vector2(0, 20000)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_minimum_size = Vector2(0, 20000)
+theme = SubResource("Theme_fjngd")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
