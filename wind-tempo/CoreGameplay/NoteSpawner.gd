@@ -1,3 +1,4 @@
+#NoteSpawner.gd
 extends Node
 
 @export var note_scene: PackedScene
