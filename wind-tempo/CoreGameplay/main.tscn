@@ -20,3 +20,14 @@ position = Vector2(1468.5857, 1230)
 scale = Vector2(0.99844235, 1)
 points = PackedVector2Array(-1540, -682, -280.02185, -682)
 default_color = Color(1, 0.00999999, 0.2245, 1)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Feedback" type="Label" parent="UI"]
+offset_left = 832.0
+offset_top = 304.0
+offset_right = 1044.0
+offset_bottom = 489.0
+theme_override_font_sizes/font_size = 50
+horizontal_alignment = 1
+vertical_alignment = 1
