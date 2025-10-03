@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk7risr2o686o"]
+[gd_scene load_steps=5 format=3 uid="uid://dk7risr2o686o"]
 
 [ext_resource type="Script" uid="uid://cl6k7aryni4ye" path="res://CoreGameplay/Main.gd" id="1_am64m"]
 [ext_resource type="Script" uid="uid://d17gpmgqn8e3w" path="res://CoreGameplay/NoteSpawner.gd" id="1_kti2m"]
 [ext_resource type="PackedScene" uid="uid://btjm4pfvpbwh6" path="res://CoreGameplay/Note.tscn" id="2_tc5u7"]
+[ext_resource type="AudioStream" uid="uid://dlxiudm6gya5h" path="res://Charts/atlantic-lights-rain-402613.mp3" id="4_am64m"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_am64m")
@@ -31,3 +32,6 @@ offset_bottom = 489.0
 theme_override_font_sizes/font_size = 50
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_am64m")
