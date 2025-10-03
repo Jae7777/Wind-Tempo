@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://yny3xfryhkt3"]
+
+[ext_resource type="Script" uid="uid://bimbbve5upnpd" path="res://scripts/Game.gd" id="1_elqb8"]
+[ext_resource type="PackedScene" uid="uid://bi8iow5w12nps" path="res://scenes/Note.tscn" id="2_rvslj"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_elqb8")
+note_scene = ExtResource("2_rvslj")
+
+[node name="Notes" type="Node2D" parent="."]
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(640, -40)
+
+[node name="JudgeLine" type="Marker2D" parent="."]
+position = Vector2(0, 400)
+
+[node name="JudgeBar" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1280, 4)
+offset_top = 398.0
+offset_right = 1280.0
+offset_bottom = 402.0
+color = Color(0.60815734, 0.36917764, 0.98512584, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 2
+vertical_alignment = 1
