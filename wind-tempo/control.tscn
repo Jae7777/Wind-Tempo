@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bgenq3i0mmhtg"]
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 339.0
+offset_right = 610.0
+offset_bottom = 370.0
+text = "Resume"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 539.0
+offset_top = 451.0
+offset_right = 609.0
+offset_bottom = 482.0
+text = "Settings"
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 0
+offset_left = 546.0
+offset_top = 390.0
+offset_right = 616.0
+offset_bottom = 421.0
+text = "Restart"
+
+[node name="Button4" type="Button" parent="."]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 507.0
+offset_right = 610.0
+offset_bottom = 538.0
+text = "Exit"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 106.0
+offset_top = 4.0
+offset_right = 146.0
+offset_bottom = 27.0
+text = "The Game has pause..."
