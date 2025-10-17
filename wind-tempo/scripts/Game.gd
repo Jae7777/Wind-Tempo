@@ -1,6 +1,12 @@
 # scripts/Game.gd
 extends Node2D
 
+# ==== Lane separators ====
+@export var show_lane_lines: bool = true
+@export var lane_line_width: float = 2.0
+@export var lane_line_color: Color = Color(1, 1, 1, 0.35) # slightly transparent white
+@export var draw_edge_lines: bool = true  # draw at left/right margins, too
+
 # ==== Scenes & Spawn ====
 @export var note_scene: PackedScene          # drag scenes/Note.tscn here
 @export var spawn_interval_min: float = 0.5  # random spawn interval range
@@ -43,10 +49,14 @@ func _ready() -> void:
 	# center the visual bar on the judge line's Y
 	judge_bar.position.y = judge_line.position.y - (judge_bar.size.y * 0.5)
 	_update_score_ui()
+	queue_redraw()
+
 
 func _notification(what):
 	if what == NOTIFICATION_WM_SIZE_CHANGED:
 		_compute_lane_x_positions()
+		queue_redraw()
+
 
 func _process(delta: float) -> void:
 	# random spawning
@@ -72,6 +82,9 @@ func _compute_lane_x_positions() -> void:
 	var step: float = usable / float(lanes - 1)
 	for i in range(lanes):
 		lane_x.append(lane_margin + step * i)
+	queue_redraw()
+
+
 
 func _spawn_note_in_lane(lane: int) -> void:
 	if note_scene == null:
@@ -136,3 +149,24 @@ func _show_feedback(text: String, color: Color) -> void:
 
 func _update_score_ui() -> void:
 	score_label.text = "Score: %d" % score
+	
+func _draw() -> void:
+	if !show_lane_lines or lane_x.is_empty():
+		return
+
+	var h := get_viewport_rect().size.y
+	var boundaries: Array[float] = []
+
+	# vertical boundaries halfway between adjacent lane centers
+	for i in range(lane_x.size() - 1):
+		boundaries.append(0.5 * (lane_x[i] + lane_x[i + 1]))
+
+	# optional edges at the outer margins
+	if draw_edge_lines:
+		var w := get_viewport_rect().size.x
+		boundaries.push_front(lane_margin)            # left edge
+		boundaries.push_back(w - lane_margin)         # right edge
+
+	# draw each separator
+	for x in boundaries:
+		draw_line(Vector2(x, 0), Vector2(x, h), lane_line_color, lane_line_width, true)
