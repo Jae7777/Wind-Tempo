@@ -131,3 +131,93 @@ layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 12
 columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer"]
+layout_mode = 2
+text = "Play"
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer2"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer2/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer2"]
+layout_mode = 2
+text = "Settings"
+vertical_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer3"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer3/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer3"]
+layout_mode = 2
+text = "Workshop"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer4"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer4/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer4"]
+layout_mode = 2
+text = "Quit "
