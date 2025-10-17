@@ -1,18 +1,19 @@
 # scripts/Game.gd
 extends Node2D
 
-# ==== Lane separators ====
+# ==== Lane / visual separators ====
 @export var show_lane_lines: bool = true
 @export var lane_line_width: float = 2.0
-@export var lane_line_color: Color = Color(1, 1, 1, 0.35) # slightly transparent white
-@export var draw_edge_lines: bool = true  # draw at left/right margins, too
+@export var lane_line_color: Color = Color(1, 1, 1, 0.35)
+@export var draw_edge_lines: bool = true
+@export var lane_count: int = 88
+@export var lane_margin: float = 120.0
 
 # ==== Scenes & Spawn ====
-@export var note_scene: PackedScene          # drag scenes/Note.tscn here
-@export var spawn_interval_min: float = 0.5  # random spawn interval range
+@export var note_scene: PackedScene
+@export var spawn_interval_min: float = 0.5
 @export var spawn_interval_max: float = 1.25
-@export var spawn_y: float = -40.0           # where notes appear (above the screen)
-@export var lane_margin: float = 120.0       # left/right padding for lanes
+@export var spawn_y: float = -40.0
 
 # ==== Timing windows (pixels from JudgeLine) ====
 @export var perfect_window: float = 10.0
@@ -22,10 +23,6 @@ extends Node2D
 @export var perfect_points: int = 100
 @export var good_points: int = 50
 @export var miss_points: int = 0
-
-# ==== Input mapping (9 lanes on ASDFGHJKL) ====
-const LANE_ACTIONS := ["hit_a","hit_s","hit_d","hit_f","hit_g","hit_h","hit_j","hit_k","hit_l"]
-const KEY_LABELS   := ["A","S","D","F","G","H","J","K","L"]
 
 # ==== Nodes ====
 @onready var judge_line: Marker2D = $JudgeLine
@@ -39,6 +36,55 @@ var lane_x: Array[float] = []
 var rng := RandomNumberGenerator.new()
 var next_spawn: float = 0.0
 var score: int = 0
+var lane_width: float = 0.0
+
+# ==== Piano note labels (A0..C8) ====
+const MIDI_START_A0: int = 21
+const NOTE_NAMES: Array[String] = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
+
+func _lane_label(lane: int) -> String:
+	var midi: int = MIDI_START_A0 + lane
+	var idx: int = midi % 12
+	var name: String = NOTE_NAMES[idx]
+	var octave: int = int(midi / 12) - 1
+	return "%s%d" % [name, octave]
+
+# ==== Keyboard control (window over 88 keys) ====
+const KB_KEYS: Array[int] = [
+	Key.KEY_A, Key.KEY_S, Key.KEY_D, Key.KEY_F, Key.KEY_G,
+	Key.KEY_H, Key.KEY_J, Key.KEY_K, Key.KEY_L, Key.KEY_SEMICOLON, Key.KEY_APOSTROPHE
+]
+const KB_LEFT: int = Key.KEY_COMMA
+const KB_RIGHT: int = Key.KEY_PERIOD
+const KB_OCT_DOWN: int = Key.KEY_BRACKETLEFT
+const KB_OCT_UP: int = Key.KEY_BRACKETRIGHT
+
+var kb_base_lane: int = 0  # leftmost lane index controlled by KB window
+
+func _ensure_keyboard_actions() -> void:
+	# Create actions for each play key
+	for i in KB_KEYS.size():
+		var act := "kb_play_%d" % i
+		if !InputMap.has_action(act):
+			InputMap.add_action(act)
+			var ev := InputEventKey.new()
+			ev.physical_keycode = KB_KEYS[i]
+			ev.keycode = KB_KEYS[i]
+			InputMap.action_add_event(act, ev)
+	# Navigation actions
+	var nav := {
+		"kb_left": KB_LEFT,
+		"kb_right": KB_RIGHT,
+		"kb_oct_down": KB_OCT_DOWN,
+		"kb_oct_up": KB_OCT_UP
+	}
+	for name in nav.keys():
+		if !InputMap.has_action(name):
+			InputMap.add_action(name)
+			var ev2 := InputEventKey.new()
+			ev2.physical_keycode = nav[name]
+			ev2.keycode = nav[name]
+			InputMap.action_add_event(name, ev2)
 
 func _ready() -> void:
 	rng.randomize()
@@ -46,45 +92,61 @@ func _ready() -> void:
 	next_spawn = rng.randf_range(spawn_interval_min, spawn_interval_max)
 
 	feedback_label.visible = false
-	# center the visual bar on the judge line's Y
 	judge_bar.position.y = judge_line.position.y - (judge_bar.size.y * 0.5)
 	_update_score_ui()
+	# Default KB window centered around middle C (MIDI 60)
+	var middle_c_lane := 60 - MIDI_START_A0
+	var window := KB_KEYS.size()
+	kb_base_lane = clamp(middle_c_lane - window / 2, 0, max(0, lane_count - window))
+	_ensure_keyboard_actions()
 	queue_redraw()
 
-
-func _notification(what):
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_SIZE_CHANGED:
 		_compute_lane_x_positions()
 		queue_redraw()
 
-
 func _process(delta: float) -> void:
-	# random spawning
+	# Random spawns for testing (replace with chart/MIDI later)
 	next_spawn -= delta
 	if next_spawn <= 0.0:
 		next_spawn = rng.randf_range(spawn_interval_min, spawn_interval_max)
-		var lane := rng.randi_range(0, LANE_ACTIONS.size() - 1)
+		var lane: int = rng.randi_range(0, max(1, lane_count) - 1)
 		_spawn_note_in_lane(lane)
 
-	# per-lane input (ASDFGHJKL)
-	for i in range(LANE_ACTIONS.size()):
-		if Input.is_action_just_pressed(LANE_ACTIONS[i]):
-			_evaluate_hit_for_lane(i)
+	# KB window navigation
+	if Input.is_action_just_pressed("kb_left"):
+		kb_base_lane = max(0, kb_base_lane - 1)
+	if Input.is_action_just_pressed("kb_right"):
+		kb_base_lane = min(lane_count - KB_KEYS.size(), kb_base_lane + 1)
+	if Input.is_action_just_pressed("kb_oct_down"):
+		kb_base_lane = max(0, kb_base_lane - 12)
+	if Input.is_action_just_pressed("kb_oct_up"):
+		kb_base_lane = min(lane_count - KB_KEYS.size(), kb_base_lane + 12)
+
+	# Play notes with ASDF… ; '
+	for i in KB_KEYS.size():
+		var act := "kb_play_%d" % i
+		if Input.is_action_just_pressed(act):
+			var lane_idx := kb_base_lane + i
+			if lane_idx >= 0 and lane_idx < lane_count:
+				_evaluate_hit_for_lane(lane_idx)
 
 func _compute_lane_x_positions() -> void:
 	lane_x.clear()
-	var width := get_viewport_rect().size.x
-	var lanes := LANE_ACTIONS.size()
-	if lanes <= 1:
-		lane_x.append(width * 0.5)
-		return
+	var width: float = get_viewport_rect().size.x
 	var usable: float = max(0.0, width - 2.0 * lane_margin)
-	var step: float = usable / float(lanes - 1)
-	for i in range(lanes):
-		lane_x.append(lane_margin + step * i)
+	if lane_count <= 0 or usable <= 0.0:
+		lane_x.append(width * 0.5)
+		lane_width = usable
+		return
+
+	lane_width = usable / float(lane_count)
+	for i in range(lane_count):
+		var center_x: float = lane_margin + (i + 0.5) * lane_width
+		lane_x.append(center_x)
+
 	queue_redraw()
-
-
 
 func _spawn_note_in_lane(lane: int) -> void:
 	if note_scene == null:
@@ -95,20 +157,22 @@ func _spawn_note_in_lane(lane: int) -> void:
 
 	var note := note_scene.instantiate() as Node2D
 	note.position = Vector2(lane_x[lane], spawn_y)
-	note.set("lane", lane)  # store which lane it belongs to
+	note.set("lane", lane)
 	notes_container.add_child(note)
 
-	# Optional: color by lane (requires Polygon2D named "Shape" under Note)
-	var poly := note.get_node_or_null("Shape")
+	# Fit note width to the lane width (Polygon2D assumed -12..12 => 24px base)
+	var poly := note.get_node_or_null("Polygon2D")
 	if poly is Polygon2D:
-		var hue := float(lane) / float(LANE_ACTIONS.size())
+		var base_w: float = 24.0
+		(poly as Polygon2D).scale.x = (max(1.0, lane_width)) / base_w
+		# Optional: color per lane
+		var hue: float = float(lane) / float(lane_count)
 		(poly as Polygon2D).color = Color.from_hsv(hue, 0.75, 0.95)
 
 func _evaluate_hit_for_lane(lane: int) -> void:
 	var best: Node2D = null
-	var best_dist := INF
+	var best_dist: float = INF
 
-	# find nearest note in this lane only
 	for c in notes_container.get_children():
 		if c is Node2D and int(c.get("lane")) == lane:
 			var d: float = abs((c as Node2D).global_position.y - judge_line.global_position.y)
@@ -116,18 +180,19 @@ func _evaluate_hit_for_lane(lane: int) -> void:
 				best_dist = d
 				best = c
 
-	var result := "MISS (%s)" % KEY_LABELS[lane]
-	var points := miss_points
-	var color := Color(1.0, 0.3, 0.3)
+	var label: String = _lane_label(lane)
+	var result: String = "MISS (%s)" % label
+	var points: int = miss_points
+	var color: Color = Color(1.0, 0.3, 0.3)
 
 	if best != null:
 		if best_dist <= perfect_window:
-			result = "PERFECT (%s)" % KEY_LABELS[lane]
+			result = "PERFECT (%s)" % label
 			points = perfect_points
 			color = Color(0.3, 1.0, 0.3)
 			best.queue_free()
 		elif best_dist <= good_window:
-			result = "GOOD (%s)" % KEY_LABELS[lane]
+			result = "GOOD (%s)" % label
 			points = good_points
 			color = Color(1.0, 0.9, 0.3)
 			best.queue_free()
@@ -149,24 +214,26 @@ func _show_feedback(text: String, color: Color) -> void:
 
 func _update_score_ui() -> void:
 	score_label.text = "Score: %d" % score
-	
+
 func _draw() -> void:
-	if !show_lane_lines or lane_x.is_empty():
+	if !show_lane_lines:
 		return
 
-	var h := get_viewport_rect().size.y
-	var boundaries: Array[float] = []
+	var rect := get_viewport_rect()
+	var w: float = rect.size.x
+	var h: float = rect.size.y
+	var usable: float = max(0.0, w - 2.0 * lane_margin)
+	if lane_count <= 0 or usable <= 0.0:
+		return
 
-	# vertical boundaries halfway between adjacent lane centers
-	for i in range(lane_x.size() - 1):
-		boundaries.append(0.5 * (lane_x[i] + lane_x[i + 1]))
+	var step_w: float = usable / float(lane_count)
 
-	# optional edges at the outer margins
+	var start_x: float = lane_margin
 	if draw_edge_lines:
-		var w := get_viewport_rect().size.x
-		boundaries.push_front(lane_margin)            # left edge
-		boundaries.push_back(w - lane_margin)         # right edge
-
-	# draw each separator
-	for x in boundaries:
+		draw_line(Vector2(start_x, 0), Vector2(start_x, h), lane_line_color, lane_line_width, true)
+	for i in range(1, lane_count):
+		var x: float = start_x + float(i) * step_w
 		draw_line(Vector2(x, 0), Vector2(x, h), lane_line_color, lane_line_width, true)
+	if draw_edge_lines:
+		var right_x: float = start_x + float(lane_count) * step_w
+		draw_line(Vector2(right_x, 0), Vector2(right_x, h), lane_line_color, lane_line_width, true)
