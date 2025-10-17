@@ -53,5 +53,4 @@ return 0.0
 return float(correct_notes) / float(total_notes) * 100.0
 
 func show_feedback(text: String):
-# You can add a temporary label or animation here for visual feedback
 print(text)
