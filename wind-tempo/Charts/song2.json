@@ -1,0 +1,15 @@
+[gd_resource type="JSON" format=3 uid="uid://qflyna712jg6"]
+
+[resource]
+data = {
+"notes": [{
+"lane": 1.0,
+"time": 0.5
+}, {
+"lane": 2.0,
+"time": 1.0
+}, {
+"lane": 0.0,
+"time": 1.5
+}]
+}
