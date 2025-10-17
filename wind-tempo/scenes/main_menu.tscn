@@ -113,6 +113,7 @@ theme_override_constants/separation = 20
 [node name="Wind Tempo" type="Label" parent="MainMenu/RightContent"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 96
+text = "Wind Tempo"
 horizontal_alignment = 1
 
 [node name="Underline" type="ColorRect" parent="MainMenu/RightContent"]
