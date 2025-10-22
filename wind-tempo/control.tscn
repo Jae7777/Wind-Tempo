@@ -8,50 +8,56 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 540.0
-offset_top = 339.0
-offset_right = 610.0
-offset_bottom = 370.0
-text = "Resume"
-
-[node name="Button2" type="Button" parent="."]
-layout_mode = 0
-offset_left = 539.0
-offset_top = 451.0
-offset_right = 609.0
-offset_bottom = 482.0
-text = "Settings"
-
-[node name="Button3" type="Button" parent="."]
-layout_mode = 0
-offset_left = 546.0
-offset_top = 390.0
-offset_right = 616.0
-offset_bottom = 421.0
-text = "Restart"
-
-[node name="Button4" type="Button" parent="."]
-layout_mode = 0
-offset_left = 540.0
-offset_top = 507.0
-offset_right = 610.0
-offset_bottom = 538.0
-text = "Exit"
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 106.0
-offset_top = 4.0
-offset_right = 146.0
-offset_bottom = 27.0
+[node name="Pause Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.0
+offset_top = 150.0
+offset_right = 87.0
+offset_bottom = 173.00002
+grow_horizontal = 2
 text = "The Game has pause..."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -0.9
+offset_right = -0.9000244
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -68.0
+offset_right = 35.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Restart button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Reestart"
+
+[node name="Options button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Options"
+
+[node name="Main Menu button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
