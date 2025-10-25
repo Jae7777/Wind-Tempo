@@ -41,3 +41,56 @@ offset_right = 40.0
 offset_bottom = 23.0
 theme_override_font_sizes/font_size = 40
 text = "Score: 0"
+
+[node name="ComboLabel" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 35
+text = ""
+
+[node name="AccuracyLabel" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 110.0
+offset_right = 400.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 28
+text = "Accuracy: --.--%"
+
+[node name="StatsPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsLabel" type="Label" parent="CanvasLayer/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "=== FINAL STATS ===
+
+Score: 0
+
+Perfect: 0
+Good: 0
+Miss: 0
+Total Notes: 0
+
+Accuracy: 0.00%
+
+Max Combo: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
