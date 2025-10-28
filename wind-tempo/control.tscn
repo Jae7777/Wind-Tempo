@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bgenq3i0mmhtg"]
+[gd_scene load_steps=2 format=3 uid="uid://bgenq3i0mmhtg"]
+
+[ext_resource type="Script" uid="uid://bl52ef5smxmkf" path="res://Pause_Menu.gd" id="1_0fbet"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -21,6 +23,7 @@ grow_horizontal = 2
 text = "The Game has pause..."
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("1_0fbet")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

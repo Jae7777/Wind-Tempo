@@ -28,3 +28,19 @@ func _on_Main_Menu_pressed():
 	# Un-pause and switch to the main menu scene.
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://main_menu.tscn")
+
+
+func _on_resume_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_restart_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_options_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_main_menu_button_pressed() -> void:
+	pass # Replace with function body.
