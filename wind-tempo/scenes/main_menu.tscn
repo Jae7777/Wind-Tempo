@@ -21,7 +21,8 @@ color = Color(0.37802696, 9.775355e-05, 0.37802422, 1)
 
 [node name="LeftPanel" type="Control" parent="MainMenu"]
 layout_mode = 1
-anchor_right = 0.28
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="PanelBG" type="ColorRect" parent="MainMenu/LeftPanel"]
@@ -45,7 +46,9 @@ offset_bottom = 40.0
 theme_override_constants/separation = 10
 
 [node name="KeyPlay" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyPlay"]
 layout_mode = 1
@@ -59,6 +62,7 @@ offset_right = -24.0
 offset_bottom = 20.0
 
 [node name="KeySettings" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
 layout_mode = 2
 
 [node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeySettings"]
@@ -73,6 +77,7 @@ offset_right = -24.0
 offset_bottom = 20.0
 
 [node name="KeyWorkshops" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
 
 [node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyWorkshops"]
@@ -87,6 +92,7 @@ offset_right = -24.0
 offset_bottom = 20.0
 
 [node name="KeyExit" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
 layout_mode = 2
 
 [node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyExit"]
@@ -103,7 +109,7 @@ offset_bottom = 20.0
 [node name="RightContent" type="VBoxContainer" parent="MainMenu"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.28
+anchor_left = 0.34
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 40.0
