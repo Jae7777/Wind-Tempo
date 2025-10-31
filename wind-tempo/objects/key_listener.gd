@@ -1,7 +1,8 @@
 extends Sprite2D
 
-func _ready():
-		pass
+@export var key_name: String = ""
+
 
 func _process(delta):
-		pass
+		if Input.is_action_just_pressed(key_name):
+			print(key_name)
