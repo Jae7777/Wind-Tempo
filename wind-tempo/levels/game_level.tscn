@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://b5ifyllxkwvqf"]
+
+[ext_resource type="Texture2D" uid="uid://bynygenara5cm" path="res://art/white key (unpressed).png" id="1_sklrn"]
+[ext_resource type="Texture2D" uid="uid://chj2ehf6envlg" path="res://art/black key (unpressed).png" id="2_d65c1"]
+
+[node name="GameLevel" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="WhiteKey(unpressed)" type="Sprite2D" parent="."]
+position = Vector2(-107, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)2" type="Sprite2D" parent="."]
+position = Vector2(-65, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)3" type="Sprite2D" parent="."]
+position = Vector2(-23, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)4" type="Sprite2D" parent="."]
+position = Vector2(19, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)5" type="Sprite2D" parent="."]
+position = Vector2(61, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)6" type="Sprite2D" parent="."]
+position = Vector2(103, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="WhiteKey(unpressed)7" type="Sprite2D" parent="."]
+position = Vector2(145, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+
+[node name="BlackKey(unpressed)" type="Sprite2D" parent="."]
+position = Vector2(-161, 233.00002)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+
+[node name="BlackKey(unpressed)2" type="Sprite2D" parent="."]
+position = Vector2(-114, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+
+[node name="BlackKey(unpressed)3" type="Sprite2D" parent="."]
+position = Vector2(-33, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+
+[node name="BlackKey(unpressed)4" type="Sprite2D" parent="."]
+position = Vector2(9, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+
+[node name="BlackKey(unpressed)5" type="Sprite2D" parent="."]
+position = Vector2(50, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")

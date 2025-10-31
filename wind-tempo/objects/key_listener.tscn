@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7qcxxx6uq2t1"]
+
+[ext_resource type="Texture2D" uid="uid://dqxodl28rj1h7" path="res://art/pixil piano.png" id="1_181ek"]
+[ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="2_vgigu"]
+
+[node name="KeyListeners" type="Sprite2D"]
+position = Vector2(11, -19)
+texture = ExtResource("1_181ek")
+script = ExtResource("2_vgigu")
