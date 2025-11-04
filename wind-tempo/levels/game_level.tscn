@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5ifyllxkwvqf"]
+[gd_scene load_steps=5 format=3 uid="uid://b5ifyllxkwvqf"]
 
 [ext_resource type="Texture2D" uid="uid://bynygenara5cm" path="res://art/white key (unpressed).png" id="1_sklrn"]
 [ext_resource type="Texture2D" uid="uid://chj2ehf6envlg" path="res://art/black key (unpressed).png" id="2_d65c1"]
 [ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="2_n0b0m"]
+[ext_resource type="Texture2D" uid="uid://e73vp1duao4f" path="res://art/white key (pressed).png" id="4_n0b0m"]
 
 [node name="GameLevel" type="Node2D"]
 
@@ -91,3 +92,38 @@ scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
 key_name = "button_["
+
+[node name="FallingC" type="Sprite2D" parent="."]
+position = Vector2(28, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingD" type="Sprite2D" parent="."]
+position = Vector2(70, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingE" type="Sprite2D" parent="."]
+position = Vector2(112, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingF" type="Sprite2D" parent="."]
+position = Vector2(154, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingG" type="Sprite2D" parent="."]
+position = Vector2(196, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingA" type="Sprite2D" parent="."]
+position = Vector2(238, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")
+
+[node name="FallingB" type="Sprite2D" parent="."]
+position = Vector2(280, -350)
+scale = Vector2(5, 5)
+texture = ExtResource("4_n0b0m")

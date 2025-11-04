@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://dwv0rh181f3y0"]
+
+[node name="FallingKey" type="Sprite2D"]
+position = Vector2(-1, 0)
