@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5ifyllxkwvqf"]
+[gd_scene load_steps=6 format=3 uid="uid://b5ifyllxkwvqf"]
 
 [ext_resource type="Texture2D" uid="uid://bynygenara5cm" path="res://art/white key (unpressed).png" id="1_sklrn"]
 [ext_resource type="Texture2D" uid="uid://chj2ehf6envlg" path="res://art/black key (unpressed).png" id="2_d65c1"]
 [ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="2_n0b0m"]
 [ext_resource type="Texture2D" uid="uid://e73vp1duao4f" path="res://art/white key (pressed).png" id="4_n0b0m"]
+[ext_resource type="Texture2D" uid="uid://6ahg38pso3hu" path="res://art/black key (pressed).png" id="5_2i5ty"]
 
 [node name="GameLevel" type="Node2D"]
+metadata/_edit_vertical_guides_ = [-429.0]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -127,3 +129,28 @@ texture = ExtResource("4_n0b0m")
 position = Vector2(280, -350)
 scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
+
+[node name="Falling_CSharpDFlat" type="Sprite2D" parent="."]
+position = Vector2(-17, -450)
+scale = Vector2(6, 6)
+texture = ExtResource("5_2i5ty")
+
+[node name="Falling_DSharpEFlat" type="Sprite2D" parent="."]
+position = Vector2(30, -450)
+scale = Vector2(6, 6)
+texture = ExtResource("5_2i5ty")
+
+[node name="Falling_FSharpGFlat" type="Sprite2D" parent="."]
+position = Vector2(111, -450)
+scale = Vector2(6, 6)
+texture = ExtResource("5_2i5ty")
+
+[node name="Falling_GSharpAFlat" type="Sprite2D" parent="."]
+position = Vector2(153, -450)
+scale = Vector2(6, 6)
+texture = ExtResource("5_2i5ty")
+
+[node name="Falling_ASharpBFlat" type="Sprite2D" parent="."]
+position = Vector2(194, -450)
+scale = Vector2(6, 6)
+texture = ExtResource("5_2i5ty")
