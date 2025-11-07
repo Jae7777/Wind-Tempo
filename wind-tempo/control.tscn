@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://bgenq3i0mmhtg"]
+[gd_scene load_steps=3 format=3 uid="uid://bgenq3i0mmhtg"]
 
 [ext_resource type="Script" uid="uid://bl52ef5smxmkf" path="res://Pause_Menu.gd" id="1_0fbet"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbet"]
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.26666668, 0.26666668, 0.26666668, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -9,6 +21,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MainPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0fbet")
 
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
@@ -64,7 +92,7 @@ text = "Resume"
 
 [node name="Restart button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Reestart"
+text = "Restart"
 
 [node name="Options button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
