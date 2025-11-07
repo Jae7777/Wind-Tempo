@@ -1,8 +1,12 @@
 {
   "notes": [
-	{ "time": 1.2, "lane": 0 },
-	{ "time": 2.0, "lane": 1 },
-	{ "time": 2.5, "lane": 0 },
-	{ "time": 3.0, "lane": 2 }
+	{ "time": 1.0, "lane": 0 },
+	{ "time": 1.5, "lane": 1 },
+	{ "time": 2.0, "lane": 2 },
+	{ "time": 2.5, "lane": 3 },
+	{ "time": 3.5, "lane": 0 },
+	{ "time": 4.0, "lane": 1 },
+	{ "time": 4.5, "lane": 2 },
+	{ "time": 5.0, "lane": 3 }
   ]
 }
