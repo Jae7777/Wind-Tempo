@@ -38,6 +38,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0fbet")
 
+[node name="MenuVBox" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
