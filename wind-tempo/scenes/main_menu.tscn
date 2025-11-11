@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://opg0dixgcxcg"]
+[gd_scene load_steps=2 format=3 uid="uid://opg0dixgcxcg"]
+
+[ext_resource type="Script" uid="uid://dd547ny3cykls" path="res://scenes/main_menu.gd" id="1_l6cm7"]
 
 [node name="main-menu" type="Node2D"]
 
@@ -9,14 +11,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_l6cm7")
 
 [node name="BG" type="ColorRect" parent="MainMenu"]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 color = Color(0.37802696, 9.775355e-05, 0.37802422, 1)
 
 [node name="LeftPanel" type="Control" parent="MainMenu"]
