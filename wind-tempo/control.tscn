@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgenq3i0mmhtg"]
+[gd_scene load_steps=4 format=3 uid="uid://bgenq3i0mmhtg"]
 
 [ext_resource type="Script" uid="uid://bl52ef5smxmkf" path="res://Pause_Menu.gd" id="1_0fbet"]
+[ext_resource type="Script" uid="uid://ulgilp6twdk4" path="res://pause_icon.gd" id="1_62e2m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbet"]
 bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
@@ -41,6 +42,15 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_0fbet")
 [node name="MenuVBox" type="VBoxContainer" parent="MainPanel"]
 layout_mode = 2
 theme_override_constants/separation = 15
+
+[node name="TitleHBox" type="HBoxContainer" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="PauseIcon" type="TextureRect" parent="MainPanel/MenuVBox/TitleHBox"]
+custom_minimum_size = Vector2(15, 20)
+layout_mode = 2
+script = ExtResource("1_62e2m")
 
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
