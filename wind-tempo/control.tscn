@@ -45,12 +45,19 @@ theme_override_constants/separation = 15
 
 [node name="TitleHBox" type="HBoxContainer" parent="MainPanel/MenuVBox"]
 layout_mode = 2
+theme_override_constants/separation = 20
 alignment = 1
 
 [node name="PauseIcon" type="TextureRect" parent="MainPanel/MenuVBox/TitleHBox"]
 custom_minimum_size = Vector2(15, 20)
 layout_mode = 2
 script = ExtResource("1_62e2m")
+
+[node name="TitleLabel" type="Label" parent="MainPanel/MenuVBox/TitleHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "PAUSE"
+vertical_alignment = 1
 
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
