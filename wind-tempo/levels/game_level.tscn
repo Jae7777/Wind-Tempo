@@ -102,11 +102,21 @@ scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="FallingC"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="FallingD" type="Sprite2D" parent="."]
 position = Vector2(70, -350)
 scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="FallingD"]
+wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="FallingE" type="Sprite2D" parent="."]
 position = Vector2(112, -350)
@@ -114,11 +124,21 @@ scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="FallingE"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="FallingF" type="Sprite2D" parent="."]
 position = Vector2(154, -350)
 scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="FallingF"]
+wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="FallingG" type="Sprite2D" parent="."]
 position = Vector2(196, -350)
@@ -126,11 +146,21 @@ scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="FallingG"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="FallingA" type="Sprite2D" parent="."]
 position = Vector2(238, -350)
 scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="FallingA"]
+wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="FallingB" type="Sprite2D" parent="."]
 position = Vector2(280, -350)
@@ -138,11 +168,21 @@ scale = Vector2(5, 5)
 texture = ExtResource("4_n0b0m")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="FallingB"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="Falling_CSharpDFlat" type="Sprite2D" parent="."]
 position = Vector2(-17, -353)
 scale = Vector2(6, 6)
 texture = ExtResource("5_2i5ty")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="Falling_CSharpDFlat"]
+wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="Falling_DSharpEFlat" type="Sprite2D" parent="."]
 position = Vector2(30, -353)
@@ -150,11 +190,21 @@ scale = Vector2(6, 6)
 texture = ExtResource("5_2i5ty")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="Falling_DSharpEFlat"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="Falling_FSharpGFlat" type="Sprite2D" parent="."]
 position = Vector2(111, -353)
 scale = Vector2(6, 6)
 texture = ExtResource("5_2i5ty")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="Falling_FSharpGFlat"]
+wait_time = 5.0
+one_shot = true
+autostart = true
 
 [node name="Falling_GSharpAFlat" type="Sprite2D" parent="."]
 position = Vector2(153, -353)
@@ -162,8 +212,18 @@ scale = Vector2(6, 6)
 texture = ExtResource("5_2i5ty")
 script = ExtResource("5_wtvao")
 
+[node name="Timer" type="Timer" parent="Falling_GSharpAFlat"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="Falling_ASharpBFlat" type="Sprite2D" parent="."]
 position = Vector2(194, -353)
 scale = Vector2(6, 6)
 texture = ExtResource("5_2i5ty")
 script = ExtResource("5_wtvao")
+
+[node name="Timer" type="Timer" parent="Falling_ASharpBFlat"]
+wait_time = 5.0
+one_shot = true
+autostart = true

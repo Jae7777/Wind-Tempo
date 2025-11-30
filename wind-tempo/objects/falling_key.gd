@@ -1,21 +1,19 @@
 extends Sprite2D
 
-#Falling key speed
-@export var fall_speed: float = 9
+@export var fall_speed: float = 3
 
-#var init_y_pos: float = -350
-
-#func _init():
-#		set_process(false)
+#Just a testing statement to ensure that it's running
+func _ready() -> void:
+	if has_node("Timer"):
+		$Timer.start()            
+		print(name, "Timer started wait_time=", $Timer.wait_time)
 
 func _process(delta):
-		global_position += Vector2(0, fall_speed)
-		
-		if global_position.y > 316.0 and not $Timer.is_stopped():
-				print($Timer.time_left)
-				$Timer.stop()
+	position += Vector2(0, fall_speed)
 
-#func SetUp(target_x: float):
-#		global_position = Vector2(target_x, init_y_pos)
-#		set_process(true)
-		
+#REMEMBER TO CHANGE:
+#316 Y-level for White Keys
+#266 Y-levle for Black Keys
+	if position.y > 280.0 and not $Timer.is_stopped():
+		print($Timer.wait_time - $Timer.time_left)
+		$Timer.stop()
