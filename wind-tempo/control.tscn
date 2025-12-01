@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bgenq3i0mmhtg"]
+[gd_scene load_steps=12 format=3 uid="uid://bgenq3i0mmhtg"]
 
 [ext_resource type="Script" uid="uid://bl52ef5smxmkf" path="res://Pause_Menu.gd" id="1_0fbet"]
 [ext_resource type="Script" uid="uid://ulgilp6twdk4" path="res://pause_icon.gd" id="1_62e2m"]
@@ -32,6 +32,24 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtu10"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee4bf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kbped"]
+bg_color = Color(0.22745098, 0.22745098, 0.22745098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fj5cn"]
+bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iy58a"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -71,17 +89,36 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_62e2m")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_qtu10")
 text = "Resume"
 
-[node name="Restart button" type="Button" parent="MainPanel/MenuVBox"]
+[node name="Restart Button" type="Button" parent="MainPanel/MenuVBox"]
 layout_mode = 2
-text = "Restart"
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Restart Song"
 
-[node name="Options button" type="Button" parent="MainPanel/MenuVBox"]
+[node name="Option Button" type="Button" parent="MainPanel/MenuVBox"]
 layout_mode = 2
-text = "Options"
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Options
+"
 
-[node name="Main Menu button" type="Button" parent="MainPanel/MenuVBox"]
+[node name="Main Menu Button" type="Button" parent="MainPanel/MenuVBox"]
 layout_mode = 2
-text = "Main Menu"
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Main Manu"
 
 [node name="TitleHBox" type="HBoxContainer" parent="MainPanel/MenuVBox"]
 layout_mode = 2
