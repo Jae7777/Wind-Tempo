@@ -1,0 +1,227 @@
+[gd_scene load_steps=2 format=3 uid="uid://opg0dixgcxcg"]
+
+[ext_resource type="Script" uid="uid://dd547ny3cykls" path="res://scenes/main_menu.gd" id="1_l6cm7"]
+
+[node name="main-menu" type="Node2D"]
+
+[node name="MainMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6cm7")
+
+[node name="BG" type="ColorRect" parent="MainMenu"]
+layout_mode = 1
+color = Color(0.37802696, 9.775355e-05, 0.37802422, 1)
+
+[node name="LeftPanel" type="Control" parent="MainMenu"]
+layout_mode = 1
+anchor_bottom = 1.0
+offset_left = 600.0
+
+[node name="PanelBG" type="ColorRect" parent="MainMenu/LeftPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.21410304, 0.21410304, 0.21410301, 1)
+
+[node name="Piano" type="VBoxContainer" parent="MainMenu/LeftPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.15
+anchor_right = 0.95
+anchor_bottom = 0.85
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 10
+
+[node name="KeyPlay" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyPlay"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = -24.0
+offset_bottom = 20.0
+
+[node name="KeySettings" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeySettings"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = -24.0
+offset_bottom = 20.0
+
+[node name="KeyWorkshops" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyWorkshops"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = -24.0
+offset_bottom = 20.0
+
+[node name="KeyExit" type="Button" parent="MainMenu/LeftPanel/Piano"]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MainMenu/LeftPanel/Piano/KeyExit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = -24.0
+offset_bottom = 20.0
+
+[node name="RightContent" type="VBoxContainer" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 20
+
+[node name="Wind Tempo" type="Label" parent="MainMenu/RightContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 96
+text = "Wind Tempo"
+horizontal_alignment = 1
+
+[node name="Underline" type="ColorRect" parent="MainMenu/RightContent"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+color = Color(0.5254902, 0.20392157, 1, 1)
+
+[node name="Hint" type="Label" parent="MainMenu/RightContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Press the highlighted piano keys to navigate"
+horizontal_alignment = 1
+
+[node name="Legend" type="GridContainer" parent="MainMenu/RightContent"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer"]
+layout_mode = 2
+text = "Play"
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer2"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer2/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer2"]
+layout_mode = 2
+text = "Settings"
+vertical_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="KeyBadge" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer3"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer3/KeyBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer3"]
+layout_mode = 2
+text = "Workshop"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MainMenu/RightContent/Legend"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainMenu/RightContent/Legend/HBoxContainer4"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer4/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightContent/Legend/HBoxContainer4"]
+layout_mode = 2
+text = "Quit "
