@@ -1,9 +1,9 @@
 extends Control
 
-@onready var key_play: Button      = $LeftPanel/Piano/KeyPlay
-@onready var key_settings: Button  = $LeftPanel/Piano/KeySettings
-@onready var key_workshops: Button = $LeftPanel/Piano/KeyWorkshops
-@onready var key_exit: Button      = $LeftPanel/Piano/KeyExit
+@export var key_play: Button
+@export var key_settings: Button
+@export var key_workshops: Button
+@export var key_exit: Button
 
 func _ready() -> void:
 	key_play.pressed.connect(_on_play)
