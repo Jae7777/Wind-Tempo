@@ -1,8 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://csettingsscene"]
+[gd_scene load_steps=4 format=3 uid="uid://bduoje8adu4yk"]
 
-[ext_resource type="Script" path="res://scenes/Settings.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://x0ysd7mwo6vj" path="res://scenes/Settings.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://scenes/menu.tres" id="2_i47rn"]
 
-[node name="Settings" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_46duy"]
+bg_color = Color(0.09906257, 0.22058395, 0.32092142, 1)
+
+[node name="Settings" type="Control" node_paths=PackedStringArray("midi_device_list", "refresh_button", "back_button", "note_speed_slider", "note_speed_label", "volume_slider", "volume_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +14,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
+midi_device_list = NodePath("VBoxContainer/GridContainer/MidiSection/DeviceList")
+refresh_button = NodePath("VBoxContainer/GridContainer/MidiSection/RefreshButton")
+back_button = NodePath("BackButton")
+note_speed_slider = NodePath("VBoxContainer/GridContainer/GameplaySection/NoteSpeedSlider")
+note_speed_label = NodePath("VBoxContainer/GridContainer/GameplaySection/NoteSpeedRow/NoteSpeedTitle")
+volume_slider = NodePath("VBoxContainer/GridContainer/AudioSection/VolumeSlider")
+volume_label = NodePath("VBoxContainer/GridContainer/AudioSection/VolumeRow/VolumeTitle")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -20,66 +31,78 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.12, 0.11, 0.18, 1)
 
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.31163195
+anchor_top = 0.058641974
+anchor_right = 0.6883681
+anchor_bottom = 0.16203703
+grow_horizontal = 2
+theme = ExtResource("2_i47rn")
+theme_override_font_sizes/font_size = 48
+text = "Settings"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 60.0
-offset_top = 40.0
-offset_right = -60.0
-offset_bottom = -40.0
+offset_top = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 25
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "⚙ Settings"
-horizontal_alignment = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("2_i47rn")
+theme_override_constants/h_separation = 36
+columns = 2
 
-[node name="MidiSection" type="VBoxContainer" parent="VBoxContainer"]
+[node name="MidiSection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="MidiTitle" type="Label" parent="VBoxContainer/MidiSection"]
+[node name="MidiTitle" type="Label" parent="VBoxContainer/GridContainer/MidiSection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "🎹 MIDI Devices"
 
-[node name="DeviceList" type="ItemList" parent="VBoxContainer/MidiSection"]
+[node name="DeviceList" type="ItemList" parent="VBoxContainer/GridContainer/MidiSection"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 
-[node name="RefreshButton" type="Button" parent="VBoxContainer/MidiSection"]
+[node name="RefreshButton" type="Button" parent="VBoxContainer/GridContainer/MidiSection"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
 text = "🔄 Refresh Devices"
 
-[node name="GameplaySection" type="VBoxContainer" parent="VBoxContainer"]
+[node name="GameplaySection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="GameplayTitle" type="Label" parent="VBoxContainer/GameplaySection"]
+[node name="GameplayTitle" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "🎮 Gameplay"
 
-[node name="NoteSpeedRow" type="HBoxContainer" parent="VBoxContainer/GameplaySection"]
+[node name="NoteSpeedRow" type="HBoxContainer" parent="VBoxContainer/GridContainer/GameplaySection"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="NoteSpeedTitle" type="Label" parent="VBoxContainer/GameplaySection/NoteSpeedRow"]
+[node name="NoteSpeedTitle" type="Label" parent="VBoxContainer/GridContainer/GameplaySection/NoteSpeedRow"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Note Travel Time:"
 
-[node name="NoteSpeedSlider" type="HSlider" parent="VBoxContainer/GameplaySection"]
+[node name="NoteSpeedSlider" type="HSlider" parent="VBoxContainer/GridContainer/GameplaySection"]
 custom_minimum_size = Vector2(300, 30)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -88,37 +111,37 @@ max_value = 4.0
 step = 0.1
 value = 2.0
 
-[node name="NoteSpeedValue" type="Label" parent="VBoxContainer/GameplaySection"]
+[node name="NoteSpeedValue" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "2.0s"
 
-[node name="NoteSpeedHint" type="Label" parent="VBoxContainer/GameplaySection"]
+[node name="NoteSpeedHint" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.6, 0.6, 0.7, 1)
+theme_override_font_sizes/font_size = 14
 text = "Lower = faster notes, higher = slower notes (more reaction time)"
 
-[node name="AudioSection" type="VBoxContainer" parent="VBoxContainer"]
+[node name="AudioSection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="AudioTitle" type="Label" parent="VBoxContainer/AudioSection"]
+[node name="AudioTitle" type="Label" parent="VBoxContainer/GridContainer/AudioSection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "🔊 Audio"
 
-[node name="VolumeRow" type="HBoxContainer" parent="VBoxContainer/AudioSection"]
+[node name="VolumeRow" type="HBoxContainer" parent="VBoxContainer/GridContainer/AudioSection"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="VolumeTitle" type="Label" parent="VBoxContainer/AudioSection/VolumeRow"]
+[node name="VolumeTitle" type="Label" parent="VBoxContainer/GridContainer/AudioSection/VolumeRow"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Master Volume:"
 
-[node name="VolumeSlider" type="HSlider" parent="VBoxContainer/AudioSection"]
+[node name="VolumeSlider" type="HSlider" parent="VBoxContainer/GridContainer/AudioSection"]
 custom_minimum_size = Vector2(300, 30)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -126,18 +149,21 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="VolumeValue" type="Label" parent="VBoxContainer/AudioSection"]
+[node name="VolumeValue" type="Label" parent="VBoxContainer/GridContainer/AudioSection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "100%"
 
-[node name="Spacer" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="."]
 custom_minimum_size = Vector2(200, 50)
-layout_mode = 2
+layout_mode = 0
+anchor_left = 0.8133681
+anchor_top = 0.8919753
+anchor_right = 0.9869792
+anchor_bottom = 0.9691358
 size_flags_horizontal = 4
+theme = ExtResource("2_i47rn")
 theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_46duy")
 text = "← Back to Menu"
+metadata/_edit_use_anchors_ = true

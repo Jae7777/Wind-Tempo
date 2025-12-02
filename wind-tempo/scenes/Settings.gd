@@ -1,13 +1,13 @@
 # scenes/Settings.gd
 extends Control
 
-@onready var midi_device_list: ItemList = $VBoxContainer/MidiSection/DeviceList
-@onready var refresh_button: Button = $VBoxContainer/MidiSection/RefreshButton
-@onready var back_button: Button = $VBoxContainer/BackButton
-@onready var note_speed_slider: HSlider = $VBoxContainer/GameplaySection/NoteSpeedSlider
-@onready var note_speed_label: Label = $VBoxContainer/GameplaySection/NoteSpeedValue
-@onready var volume_slider: HSlider = $VBoxContainer/AudioSection/VolumeSlider
-@onready var volume_label: Label = $VBoxContainer/AudioSection/VolumeValue
+@export var midi_device_list: ItemList
+@export var refresh_button: Button 
+@export var back_button: Button
+@export var note_speed_slider: HSlider
+@export var note_speed_label: Label
+@export var volume_slider: HSlider 
+@export var volume_label: Label 
 
 # Settings values
 var note_travel_time: float = 2.0
@@ -92,4 +92,3 @@ func _on_back_pressed() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_on_back_pressed()
-
