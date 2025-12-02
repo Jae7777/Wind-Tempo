@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://workshopscene"]
+[gd_scene load_steps=3 format=3 uid="uid://ddp7t63gyb0uk"]
 
-[ext_resource type="Script" path="res://scenes/Workshop.gd" id="1_workshop"]
-[ext_resource type="Script" path="res://scenes/PianoRoll.gd" id="2_pianoroll"]
+[ext_resource type="Script" uid="uid://bt47ibmgtgxn7" path="res://scenes/workshop.gd" id="1_workshop"]
+[ext_resource type="Script" uid="uid://bkwdts540ijmv" path="res://scenes/piano_roll.gd" id="2_pianoroll"]
 
 [node name="Workshop" type="Control"]
 layout_mode = 3
@@ -110,7 +110,6 @@ custom_minimum_size = Vector2(3000, 1056)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 0
 script = ExtResource("2_pianoroll")
 
 [node name="HelpBar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/PianoRollContainer"]
@@ -118,8 +117,8 @@ layout_mode = 2
 
 [node name="HelpLabel" type="Label" parent="VBoxContainer/HSplitContainer/PianoRollContainer/HelpBar"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.5, 0.5, 0.6, 1)
+theme_override_font_sizes/font_size = 12
 text = "Left Click: Add note | Right Click: Delete note | Ctrl+Click: Select multiple | Space: Play/Stop | Ctrl+S: Save"
 
 [node name="SidePanel" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]

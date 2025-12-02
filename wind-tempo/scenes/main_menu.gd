@@ -22,17 +22,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		_on_exit()
 
 func _on_play() -> void:
-	get_tree().change_scene_to_file("res://scenes/SongSelect.tscn")
+	get_tree().change_scene_to_file("res://scenes/song_select.tscn")
 
 func _on_settings() -> void:
-	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
+	get_tree().change_scene_to_file("res://scenes/settings.tscn")
 
 func _on_workshops() -> void:
 	# Ensure user tracks directory exists
 	var dir := DirAccess.open("user://")
 	if dir and not dir.dir_exists("tracks"):
 		dir.make_dir("tracks")
-	get_tree().change_scene_to_file("res://scenes/Workshops.tscn")
+	get_tree().change_scene_to_file("res://scenes/workshop.tscn")
 
 func _on_exit() -> void:
 	get_tree().quit()

@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://yny3xfryhkt3"]
 
-[ext_resource type="Script" uid="uid://bimbbve5upnpd" path="res://scripts/Game.gd" id="1_elqb8"]
-[ext_resource type="PackedScene" uid="uid://bi8iow5w12nps" path="res://scenes/Note.tscn" id="2_rvslj"]
+[ext_resource type="Script" uid="uid://bimbbve5upnpd" path="res://scripts/game.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://bi8iow5w12nps" path="res://scenes/note.tscn" id="2_sugp2"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_elqb8")
+script = ExtResource("1_0wfyh")
 game_mode = 1
-note_scene = ExtResource("2_rvslj")
+note_scene = ExtResource("2_sugp2")
 
 [node name="Notes" type="Node2D" parent="."]
 
@@ -49,7 +49,6 @@ offset_top = 60.0
 offset_right = 400.0
 offset_bottom = 105.0
 theme_override_font_sizes/font_size = 35
-text = ""
 
 [node name="AccuracyLabel" type="Label" parent="CanvasLayer"]
 offset_left = 10.0
@@ -122,7 +121,7 @@ offset_left = -200.0
 offset_top = -30.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.6, 0.6, 0.7, 1)
+theme_override_font_sizes/font_size = 14
 text = "Press ESC to quit"
 horizontal_alignment = 2
