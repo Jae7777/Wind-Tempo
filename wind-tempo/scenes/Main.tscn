@@ -1,0 +1,96 @@
+[gd_scene load_steps=3 format=3 uid="uid://yny3xfryhkt3"]
+
+[ext_resource type="Script" uid="uid://bimbbve5upnpd" path="res://scripts/Game.gd" id="1_elqb8"]
+[ext_resource type="PackedScene" uid="uid://bi8iow5w12nps" path="res://scenes/Note.tscn" id="2_rvslj"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_elqb8")
+note_scene = ExtResource("2_rvslj")
+
+[node name="Notes" type="Node2D" parent="."]
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(640, -40)
+
+[node name="JudgeLine" type="Marker2D" parent="."]
+position = Vector2(0, 500)
+
+[node name="JudgeBar" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1280, 4)
+offset_top = 498.0
+offset_right = 1280.0
+offset_bottom = 502.0
+color = Color(0.60815734, 0.36917764, 0.98512584, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 55.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 40
+text = "Score: 0"
+
+[node name="ComboLabel" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 35
+text = ""
+
+[node name="AccuracyLabel" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 110.0
+offset_right = 400.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 28
+text = "Accuracy: --.--%"
+
+[node name="StatsPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsLabel" type="Label" parent="CanvasLayer/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "=== FINAL STATS ===
+
+Score: 0
+
+Perfect: 0
+Good: 0
+Miss: 0
+Total Notes: 0
+
+Accuracy: 0.00%
+
+Max Combo: 0"
+horizontal_alignment = 1
+vertical_alignment = 1

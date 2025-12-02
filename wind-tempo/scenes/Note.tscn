@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bi8iow5w12nps"]
+
+[ext_resource type="Script" uid="uid://clg1nsi4r4lrj" path="res://scripts/Note.gd" id="1_ku001"]
+
+[node name="Notes" type="Node2D"]
+script = ExtResource("1_ku001")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-12, -20, 12, -20, 12, 20, -12, 20)
