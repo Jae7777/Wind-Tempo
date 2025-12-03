@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgenq3i0mmhtg"]
+[gd_scene load_steps=13 format=3 uid="uid://bgenq3i0mmhtg"]
 
 [ext_resource type="Script" uid="uid://ulgilp6twdk4" path="res://pause_icon.gd" id="1_62e2m"]
+[ext_resource type="Texture2D" uid="uid://cj1st7m5oomva" path="res://background_img.png" id="1_qtu10"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbet"]
 content_margin_left = 20.0
@@ -68,9 +69,15 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BackgroundImage" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qtu10")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
