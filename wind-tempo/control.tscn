@@ -67,6 +67,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="BackgroundImage" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
 [node name="MainPanel" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(400, 500)
 layout_mode = 1
@@ -160,15 +174,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
 text = "Main Manu"
 
-[node name="BackgroundDim" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5882353)
-
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -176,19 +181,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -0.9
 offset_right = -0.9000244
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = -68.0
-offset_right = 35.0
-offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
