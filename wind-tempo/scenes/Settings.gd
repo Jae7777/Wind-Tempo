@@ -1,60 +1,100 @@
-# scenes/Settings.gd
 extends Control
 
+# UI Nodes
+@export_group("Navigation")
+@export var gameplay_btn: Button
+@export var graphics_btn: Button
+@export var audio_btn: Button
+@export var input_btn: Button
+@export var back_button: Button
+
+@export_group("Containers")
+@export var gameplay_container: Control
+@export var graphics_container: Control
+@export var audio_container: Control
+@export var input_container: Control
+
+@export_group("Input Settings")
 @export var midi_device_list: ItemList
 @export var refresh_button: Button 
-@export var back_button: Button
+
+@export_group("Gameplay Settings")
 @export var note_speed_slider: HSlider
 @export var note_speed_label: Label
-@export var volume_slider: HSlider 
-@export var volume_label: Label 
 
-# Settings values
-var note_travel_time: float = 2.0
-var master_volume: float = 1.0
+@export_group("Audio Settings")
+@export var master_volume_slider: HSlider
+@export var master_volume_label: Label
+@export var music_volume_slider: HSlider
+@export var music_volume_label: Label
+@export var sfx_volume_slider: HSlider
+@export var sfx_volume_label: Label
+
+@export_group("Graphics Settings")
+@export var window_mode_btn: OptionButton
+@export var vsync_btn: CheckButton
+@export var msaa_btn: OptionButton
 
 func _ready() -> void:
-	refresh_button.pressed.connect(_on_refresh_pressed)
+	# Navigation connections
+	gameplay_btn.pressed.connect(func(): _show_category(gameplay_container))
+	graphics_btn.pressed.connect(func(): _show_category(graphics_container))
+	audio_btn.pressed.connect(func(): _show_category(audio_container))
+	input_btn.pressed.connect(func(): _show_category(input_container))
 	back_button.pressed.connect(_on_back_pressed)
-	note_speed_slider.value_changed.connect(_on_note_speed_changed)
-	volume_slider.value_changed.connect(_on_volume_changed)
 	
-	# Load current settings
-	_load_settings()
+	# Input connections
+	refresh_button.pressed.connect(_on_refresh_pressed)
+	
+	# Gameplay connections
+	note_speed_slider.value_changed.connect(_on_note_speed_changed)
+	
+	# Audio connections
+	master_volume_slider.value_changed.connect(_on_master_volume_changed)
+	music_volume_slider.value_changed.connect(_on_music_volume_changed)
+	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
+	
+	# Graphics connections
+	window_mode_btn.item_selected.connect(_on_window_mode_selected)
+	vsync_btn.toggled.connect(_on_vsync_toggled)
+	msaa_btn.item_selected.connect(_on_msaa_selected)
+	
+	# Initialize UI from SettingsManager
 	_refresh_midi_devices()
 	_update_ui()
+	
+	# Show default category
+	_show_category(gameplay_container)
 
-func _load_settings() -> void:
-	var song_manager = get_node_or_null("/root/SongManager")
-	if song_manager:
-		note_travel_time = song_manager.note_travel_time
+func _show_category(category: Control) -> void:
+	gameplay_container.visible = false
+	graphics_container.visible = false
+	audio_container.visible = false
+	input_container.visible = false
 	
-	# Load from config if exists
-	var config := ConfigFile.new()
-	if config.load("user://settings.cfg") == OK:
-		note_travel_time = config.get_value("gameplay", "note_travel_time", 2.0)
-		master_volume = config.get_value("audio", "master_volume", 1.0)
-
-func _save_settings() -> void:
-	var config := ConfigFile.new()
-	config.set_value("gameplay", "note_travel_time", note_travel_time)
-	config.set_value("audio", "master_volume", master_volume)
-	config.save("user://settings.cfg")
-	
-	# Apply to SongManager
-	var song_manager = get_node_or_null("/root/SongManager")
-	if song_manager:
-		song_manager.note_travel_time = note_travel_time
-	
-	# Apply volume
-	AudioServer.set_bus_volume_db(0, linear_to_db(master_volume))
+	category.visible = true
 
 func _update_ui() -> void:
-	note_speed_slider.value = note_travel_time
-	note_speed_label.text = "%.1fs" % note_travel_time
+	var sm = get_node("/root/SettingsManager")
 	
-	volume_slider.value = master_volume
-	volume_label.text = "%d%%" % int(master_volume * 100)
+	# Gameplay
+	note_speed_slider.value = sm.note_travel_time
+	note_speed_label.text = "%.1fs" % sm.note_travel_time
+	
+	# Audio
+	master_volume_slider.value = sm.master_volume
+	master_volume_label.text = "%d%%" % int(sm.master_volume * 100)
+	
+	music_volume_slider.value = sm.music_volume
+	music_volume_label.text = "%d%%" % int(sm.music_volume * 100)
+	
+	sfx_volume_slider.value = sm.sfx_volume
+	sfx_volume_label.text = "%d%%" % int(sm.sfx_volume * 100)
+	
+	# Graphics
+	window_mode_btn.selected = sm.window_mode
+	vsync_btn.button_pressed = sm.vsync_enabled
+	msaa_btn.selected = sm.msaa_value
 
 func _refresh_midi_devices() -> void:
 	midi_device_list.clear()
@@ -77,14 +117,43 @@ func _on_refresh_pressed() -> void:
 	_refresh_midi_devices()
 
 func _on_note_speed_changed(value: float) -> void:
-	note_travel_time = value
-	note_speed_label.text = "%.1fs" % note_travel_time
-	_save_settings()
+	var sm = get_node("/root/SettingsManager")
+	sm.note_travel_time = value
+	note_speed_label.text = "%.1fs" % value
+	sm.save_settings()
 
-func _on_volume_changed(value: float) -> void:
-	master_volume = value
-	volume_label.text = "%d%%" % int(master_volume * 100)
-	_save_settings()
+func _on_master_volume_changed(value: float) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.master_volume = value
+	master_volume_label.text = "%d%%" % int(value * 100)
+	sm.save_settings()
+
+func _on_music_volume_changed(value: float) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.music_volume = value
+	music_volume_label.text = "%d%%" % int(value * 100)
+	sm.save_settings()
+
+func _on_sfx_volume_changed(value: float) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.sfx_volume = value
+	sfx_volume_label.text = "%d%%" % int(value * 100)
+	sm.save_settings()
+
+func _on_window_mode_selected(index: int) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.window_mode = index
+	sm.save_settings()
+
+func _on_vsync_toggled(toggled_on: bool) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.vsync_enabled = toggled_on
+	sm.save_settings()
+
+func _on_msaa_selected(index: int) -> void:
+	var sm = get_node("/root/SettingsManager")
+	sm.msaa_value = index
+	sm.save_settings()
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

@@ -1,12 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bduoje8adu4yk"]
+[gd_scene load_steps=3 format=3 uid="uid://bduoje8adu4yk"]
 
 [ext_resource type="Script" uid="uid://x0ysd7mwo6vj" path="res://scenes/settings.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://scenes/menu.tres" id="2_i47rn"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_46duy"]
-bg_color = Color(0.09906257, 0.22058395, 0.32092142, 1)
-
-[node name="Settings" type="Control" node_paths=PackedStringArray("midi_device_list", "refresh_button", "back_button", "note_speed_slider", "note_speed_label", "volume_slider", "volume_label")]
+[node name="Settings" type="Control" node_paths=PackedStringArray("gameplay_btn", "graphics_btn", "audio_btn", "input_btn", "back_button", "gameplay_container", "graphics_container", "audio_container", "input_container", "midi_device_list", "refresh_button", "note_speed_slider", "note_speed_label", "master_volume_slider", "master_volume_label", "music_volume_slider", "music_volume_label", "sfx_volume_slider", "sfx_volume_label", "window_mode_btn", "vsync_btn", "msaa_btn")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,13 +11,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
-midi_device_list = NodePath("VBoxContainer/GridContainer/MidiSection/DeviceList")
-refresh_button = NodePath("VBoxContainer/GridContainer/MidiSection/RefreshButton")
-back_button = NodePath("BackButton")
-note_speed_slider = NodePath("VBoxContainer/GridContainer/GameplaySection/NoteSpeedSlider")
-note_speed_label = NodePath("VBoxContainer/GridContainer/GameplaySection/NoteSpeedRow/NoteSpeedTitle")
-volume_slider = NodePath("VBoxContainer/GridContainer/AudioSection/VolumeSlider")
-volume_label = NodePath("VBoxContainer/GridContainer/AudioSection/VolumeRow/VolumeTitle")
+gameplay_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/GameplayBtn")
+graphics_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/GraphicsBtn")
+audio_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/AudioBtn")
+input_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/InputBtn")
+back_button = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/BackButton")
+gameplay_container = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings")
+graphics_container = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings")
+audio_container = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings")
+input_container = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings")
+midi_device_list = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings/DeviceList")
+refresh_button = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings/RefreshButton")
+note_speed_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow/NoteSpeedSlider")
+note_speed_label = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow/NoteSpeedValue")
+master_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow/VolumeSlider")
+master_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow/VolumeValue")
+music_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow/VolumeSlider")
+music_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow/VolumeValue")
+sfx_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow/VolumeSlider")
+sfx_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow/VolumeValue")
+window_mode_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow/WindowModeBtn")
+vsync_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow/VSyncBtn")
+msaa_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow/MSAABtn")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -29,141 +41,311 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12, 0.11, 0.18, 1)
+color = Color(0.008202022, 0.008202025, 0.008202025, 1)
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.31163195
-anchor_top = 0.058641974
-anchor_right = 0.6883681
-anchor_bottom = 0.16203703
-grow_horizontal = 2
-theme = ExtResource("2_i47rn")
-theme_override_font_sizes/font_size = 48
-text = "Settings"
-horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 148.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+[node name="LeftPanel" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+color = Color(0.08, 0.08, 0.08, 1)
+
+[node name="Title" type="Label" parent="HBoxContainer/LeftPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
 theme = ExtResource("2_i47rn")
-theme_override_constants/h_separation = 36
-columns = 2
+theme_override_colors/font_color = Color(0.4010223, 0.79802966, 0.64853233, 1)
+theme_override_font_sizes/font_size = 48
+text = "SETTINGS"
+horizontal_alignment = 1
 
-[node name="MidiSection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/margin_left = 30
 
-[node name="MidiTitle" type="Label" parent="VBoxContainer/GridContainer/MidiSection"]
+[node name="ButtonsContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GameplayBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "🎹 MIDI Devices"
+text = "GAMEPLAY"
+flat = true
+alignment = 0
 
-[node name="DeviceList" type="ItemList" parent="VBoxContainer/GridContainer/MidiSection"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-
-[node name="RefreshButton" type="Button" parent="VBoxContainer/GridContainer/MidiSection"]
-custom_minimum_size = Vector2(200, 40)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 16
-text = "🔄 Refresh Devices"
-
-[node name="GameplaySection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="GameplayTitle" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
+[node name="GraphicsBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "🎮 Gameplay"
+text = "GRAPHICS"
+flat = true
+alignment = 0
 
-[node name="NoteSpeedRow" type="HBoxContainer" parent="VBoxContainer/GridContainer/GameplaySection"]
+[node name="AudioBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_font_sizes/font_size = 24
+text = "AUDIO"
+flat = true
+alignment = 0
 
-[node name="NoteSpeedTitle" type="Label" parent="VBoxContainer/GridContainer/GameplaySection/NoteSpeedRow"]
-custom_minimum_size = Vector2(200, 0)
+[node name="InputBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Note Travel Time:"
+theme_override_font_sizes/font_size = 24
+text = "CONTROLS"
+flat = true
+alignment = 0
 
-[node name="NoteSpeedSlider" type="HSlider" parent="VBoxContainer/GridContainer/GameplaySection"]
+[node name="BackButton" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "BACK"
+flat = true
+alignment = 0
+
+[node name="RightPanel" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="GameplaySettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5304361, 0.7663613, 0.6929174, 1)
+theme_override_font_sizes/font_size = 36
+text = "GAMEPLAY"
+
+[node name="NoteSpeedRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Note Travel Time"
+
+[node name="NoteSpeedSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
 custom_minimum_size = Vector2(300, 30)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_vertical = 4
 min_value = 1.0
 max_value = 4.0
 step = 0.1
 value = 2.0
 
-[node name="NoteSpeedValue" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
+[node name="NoteSpeedValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "2.0s"
 
-[node name="NoteSpeedHint" type="Label" parent="VBoxContainer/GridContainer/GameplaySection"]
+[node name="GraphicsSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.7, 1)
-theme_override_font_sizes/font_size = 14
-text = "Lower = faster notes, higher = slower notes (more reaction time)"
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
 
-[node name="AudioSection" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "GRAPHICS"
 
-[node name="AudioTitle" type="Label" parent="VBoxContainer/GridContainer/AudioSection"]
+[node name="WindowModeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "🔊 Audio"
+theme_override_constants/separation = 20
 
-[node name="VolumeRow" type="HBoxContainer" parent="VBoxContainer/GridContainer/AudioSection"]
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-theme_override_constants/separation = 15
+text = "Window Mode"
 
-[node name="VolumeTitle" type="Label" parent="VBoxContainer/GridContainer/AudioSection/VolumeRow"]
-custom_minimum_size = Vector2(200, 0)
+[node name="WindowModeBtn" type="OptionButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow"]
+custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Master Volume:"
+item_count = 2
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Fullscreen"
+popup/item_1/id = 1
 
-[node name="VolumeSlider" type="HSlider" parent="VBoxContainer/GridContainer/AudioSection"]
+[node name="VSyncRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "VSync"
+
+[node name="VSyncBtn" type="CheckButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow"]
+layout_mode = 2
+text = "On"
+
+[node name="MSAARow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Anti-Aliasing (MSAA)"
+
+[node name="MSAABtn" type="OptionButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "2x"
+popup/item_1/id = 1
+popup/item_2/text = "4x"
+popup/item_2/id = 2
+popup/item_3/text = "8x"
+popup/item_3/id = 3
+
+[node name="AudioSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "AUDIO"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Master Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
 custom_minimum_size = Vector2(300, 30)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="VolumeValue" type="Label" parent="VBoxContainer/GridContainer/AudioSection"]
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "100%"
 
-[node name="BackButton" type="Button" parent="."]
-custom_minimum_size = Vector2(200, 50)
-layout_mode = 0
-anchor_left = 0.8133681
-anchor_top = 0.8919753
-anchor_right = 0.9869792
-anchor_bottom = 0.9691358
-size_flags_horizontal = 4
+[node name="MusicVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Music Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+layout_mode = 2
+text = "100%"
+
+[node name="SFXVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+layout_mode = 2
+text = "100%"
+
+[node name="InputSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
 theme = ExtResource("2_i47rn")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_46duy")
-text = "← Back to Menu"
-metadata/_edit_use_anchors_ = true
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "CONTROLS"
+
+[node name="MidiTitle" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "🎹 MIDI Devices"
+
+[node name="DeviceList" type="ItemList" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="RefreshButton" type="Button" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "🔄 Refresh Devices"
