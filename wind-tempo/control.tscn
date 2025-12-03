@@ -1,6 +1,5 @@
 [gd_scene load_steps=12 format=3 uid="uid://bgenq3i0mmhtg"]
 
-[ext_resource type="Script" uid="uid://bl52ef5smxmkf" path="res://Pause_Menu.gd" id="1_0fbet"]
 [ext_resource type="Script" uid="uid://ulgilp6twdk4" path="res://pause_icon.gd" id="1_62e2m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbet"]
@@ -14,6 +13,11 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_0fbet"]
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+grow_begin = 2.0
+grow_end = 2.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62e2m"]
 
@@ -79,47 +83,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_0fbet")
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="ResumeButton" type="Button" parent="MainPanel/MenuVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_62e2m")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_qtu10")
-theme_override_styles/hover = SubResource("StyleBoxFlat_62e2m")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qtu10")
-text = "Resume"
-
-[node name="Restart Button" type="Button" parent="MainPanel/MenuVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
-text = "Restart Song"
-
-[node name="Option Button" type="Button" parent="MainPanel/MenuVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
-text = "Options
-"
-
-[node name="Main Menu Button" type="Button" parent="MainPanel/MenuVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
-text = "Main Manu"
-
 [node name="TitleHBox" type="HBoxContainer" parent="MainPanel/MenuVBox"]
 layout_mode = 2
 theme_override_constants/separation = 20
@@ -136,6 +99,63 @@ theme_override_font_sizes/font_size = 28
 text = "PAUSE"
 vertical_alignment = 1
 
+[node name="HSeparator" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="ResumeButton" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_62e2m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qtu10")
+theme_override_styles/hover = SubResource("StyleBoxFlat_62e2m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtu10")
+text = "Resume"
+
+[node name="HSeparator2" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Restart Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Restart Song"
+
+[node name="HSeparator3" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Option Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Options
+"
+
+[node name="HSeparator4" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Main Menu Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Main Manu"
+
 [node name="BackgroundDim" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -144,21 +164,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5882353)
-
-[node name="Pause Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -87.0
-offset_top = 150.0
-offset_right = 87.0
-offset_bottom = 173.00002
-grow_horizontal = 2
-text = "The Game has pause..."
-horizontal_alignment = 1
-vertical_alignment = 1
-script = ExtResource("1_0fbet")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
