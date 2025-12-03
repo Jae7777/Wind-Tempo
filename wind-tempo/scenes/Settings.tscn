@@ -322,7 +322,6 @@ layout_mode = 2
 text = "100%"
 
 [node name="InputSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("2_i47rn")
 theme_override_constants/separation = 20
@@ -348,4 +347,4 @@ custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
-text = "🔄 Refresh Devices"
+text = "Refresh Devices"
