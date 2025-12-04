@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://btjm4pfvpbwh6"]
-
-[ext_resource type="Script" uid="uid://bmhaiyecx3wdx" path="res://CoreGameplay/Note.gd" id="1_c8uvb"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c8uvb"]
+[gd_scene load_steps=2 format=3]
+[ext_resource path="res://CoreGameplay/Note.gd" type="Script" id=1]
 
 [node name="Note" type="Node2D"]
-script = ExtResource("1_c8uvb")
+script = ExtResource( 1 )
+position = Vector2( 0, -50 )
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(395.99997, 210.99998)
-scale = Vector2(78.5, 93.5)
-texture = SubResource("PlaceholderTexture2D_c8uvb")
+[node name="Label2D" type="Label2D" parent="."]
+text = "●"
+modulate = Color( 0.9, 0.2, 0.2, 1 )
+horizontal_alignment = 1
+vertical_alignment = 1
+scale = Vector2( 2, 2 )

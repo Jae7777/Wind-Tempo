@@ -1,34 +1,42 @@
-[gd_scene load_steps=5 format=3 uid="uid://dk7risr2o686o"]
+[gd_scene load_steps=6 format=3 uid="uid://b6gjeaee57w5f"]
 
-[ext_resource type="Script" uid="uid://cl6k7aryni4ye" path="res://CoreGameplay/Main.gd" id="1_am64m"]
-[ext_resource type="Script" uid="uid://d17gpmgqn8e3w" path="res://CoreGameplay/NoteSpawner.gd" id="1_kti2m"]
-[ext_resource type="PackedScene" uid="uid://btjm4pfvpbwh6" path="res://CoreGameplay/Note.tscn" id="2_tc5u7"]
-[ext_resource type="AudioStream" uid="uid://dlxiudm6gya5h" path="res://Charts/atlantic-lights-rain-402613.mp3" id="4_am64m"]
+[ext_resource type="Script" uid="uid://d1e0nuf73sye2" path="res://CoreGameplay/GameManager.gd" id="1"]
+[ext_resource type="Script" uid="uid://bwfkw78koegwn" path="res://CoreGameplay/NoteSpawner.gd" id="2"]
+[ext_resource type="Script" uid="uid://b245b8lutekyf" path="res://CoreGameplay/Piano.gd" id="3"]
+[ext_resource type="PackedScene" path="res://CoreGameplay/Note.tscn" id="4"]
+[ext_resource type="Script" uid="uid://cdf4srfquv6od" path="res://CoreGameplay/HUD.gd" id="5"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_am64m")
 
-[node name="NoteSpawner" type="Node2D" parent="."]
-script = ExtResource("1_kti2m")
-note_scene = ExtResource("2_tc5u7")
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("1")
+
+[node name="NoteSpawner" type="Node" parent="."]
+script = ExtResource("2")
+note_scene = ExtResource("4")
+
+[node name="Piano" type="Node" parent="."]
+script = ExtResource("3")
 
 [node name="HitLine" type="Line2D" parent="."]
-position = Vector2(1468.5857, 1230)
-scale = Vector2(0.99844235, 1)
-points = PackedVector2Array(-1540, -682, -280.02185, -682)
-default_color = Color(1, 0.00999999, 0.2245, 1)
+z_index = 5
+points = PackedVector2Array(0, 800, 1920, 800)
+width = 6.0
+default_color = Color(1, 0.4, 0.2, 0.95)
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("5")
 
-[node name="Feedback" type="Label" parent="UI"]
-offset_left = 832.0
-offset_top = 304.0
-offset_right = 1044.0
-offset_bottom = 489.0
-theme_override_font_sizes/font_size = 50
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+text = "Score: 0"
 
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(41, 308)
-stream = ExtResource("4_am64m")
+[node name="FeedbackLabel" type="Label" parent="HUD"]
+modulate = Color(1, 1, 1, 0)
+offset_left = 12.0
+offset_top = 44.0
+offset_right = 12.0
+offset_bottom = 44.0
