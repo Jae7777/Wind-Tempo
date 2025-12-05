@@ -5,6 +5,11 @@ extends Node
 
 var active_notes: Array = []
 var score: int = 0
+var notes_hit: int = 0
+var notes_missed: int = 0
+var total_notes: int = 0
+var current_combo: int = 0
+var max_combo: int = 0
 var hud = null
 var _hit_effect_scene = null
 
@@ -62,6 +67,10 @@ func _on_note_spawned(note) -> void:
 
 func _on_note_hit(note) -> void:
 	score += 1
+	notes_hit += 1
+	current_combo += 1
+	if current_combo > max_combo:
+		max_combo = current_combo
 	active_notes.erase(note)
 	print("Hit! Score:", score)
 	if hud:
@@ -87,6 +96,8 @@ func _on_key_pressed(lane: int) -> void:
 	if best_note:
 		best_note.on_hit()
 	else:
+		notes_missed += 1
+		current_combo = 0
 		print("Miss on lane", lane)
 		if hud:
 			hud.show_feedback("Miss")
@@ -136,12 +147,32 @@ func load_chart(path: String, spawner) -> void:
 	# Accept two formats: a top-level array of notes, or an object with a "notes" array
 	if typeof(parsed) == TYPE_ARRAY:
 		spawner.chart = parsed
+		total_notes = spawner.chart.size()
 		print("Loaded chart (array) with %d notes from %s" % [spawner.chart.size(), path])
 		return
 	elif typeof(parsed) == TYPE_DICTIONARY and parsed.has("notes") and typeof(parsed["notes"]) == TYPE_ARRAY:
 		spawner.chart = parsed["notes"]
+		total_notes = spawner.chart.size()
 		print("Loaded chart (object.notes) with %d notes from %s" % [spawner.chart.size(), path])
 		return
 	else:
 		push_error("Unexpected chart JSON format: must be a notes array or {\"notes\": [...] } in %s" % path)
 		return
+
+func _process(_delta: float) -> void:
+	# Check if all notes have been spawned and no active notes remain
+	var spawner = get_parent().get_node_or_null("NoteSpawner")
+	if spawner and total_notes > 0:
+		if spawner.next_index >= total_notes and active_notes.size() == 0:
+			# Song complete, show score screen
+			_show_score_screen()
+
+func _show_score_screen() -> void:
+	# Load score screen and pass results
+	var score_scene = load("res://ScoreScreen.tscn")
+	if score_scene:
+		var score_screen = score_scene.instantiate()
+		score_screen.set_results(score, notes_hit, total_notes, max_combo)
+		get_tree().get_root().add_child(score_screen)
+		get_tree().current_scene.queue_free()
+		get_tree().current_scene = score_screen
