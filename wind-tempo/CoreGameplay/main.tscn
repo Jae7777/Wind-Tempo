@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b6gjeaee57w5f"]
+[gd_scene load_steps=8 format=3 uid="uid://b6gjeaee57w5f"]
 
 [ext_resource type="Script" uid="uid://d1e0nuf73sye2" path="res://CoreGameplay/GameManager.gd" id="1"]
 [ext_resource type="Script" uid="uid://bwfkw78koegwn" path="res://CoreGameplay/NoteSpawner.gd" id="2"]
 [ext_resource type="Script" uid="uid://b245b8lutekyf" path="res://CoreGameplay/Piano.gd" id="3"]
 [ext_resource type="PackedScene" path="res://CoreGameplay/Note.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://CoreGameplay/HoldNote.tscn" id="4_hold"]
 [ext_resource type="Script" uid="uid://cdf4srfquv6od" path="res://CoreGameplay/HUD.gd" id="5"]
 [ext_resource type="PackedScene" path="res://CoreGameplay/PauseMenu.tscn" id="6"]
 
@@ -15,6 +16,7 @@ script = ExtResource("1")
 [node name="NoteSpawner" type="Node" parent="."]
 script = ExtResource("2")
 note_scene = ExtResource("4")
+hold_note_scene = ExtResource("4_hold")
 
 [node name="Piano" type="Node" parent="."]
 script = ExtResource("3")

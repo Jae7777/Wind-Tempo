@@ -1,0 +1,12 @@
+{
+  "notes": [
+    { "time": 1.0, "lane": 0, "type": "normal" },
+    { "time": 2.0, "lane": 1, "type": "hold", "duration": 1.5 },
+    { "time": 3.0, "lane": 2, "type": "normal" },
+    { "time": 4.0, "lane": 3, "type": "hold", "duration": 2.0 },
+    { "time": 5.5, "lane": 0, "type": "normal" },
+    { "time": 6.0, "lane": 1, "type": "normal" },
+    { "time": 7.0, "lane": 2, "type": "hold", "duration": 1.0 },
+    { "time": 8.5, "lane": 3, "type": "normal" }
+  ]
+}

@@ -4,6 +4,7 @@ extends Node
 @export var hit_tolerance: float = 40.0
 
 var active_notes: Array = []
+var active_hold_notes: Dictionary = {}  # lane -> hold note being held
 var score: int = 0
 var notes_hit: int = 0
 var notes_missed: int = 0
@@ -20,6 +21,7 @@ func _ready() -> void:
 	var spawner = parent.get_node_or_null("NoteSpawner")
 	if piano:
 		piano.connect("key_pressed", Callable(self, "_on_key_pressed"))
+		piano.connect("key_released", Callable(self, "_on_key_released"))
 	if spawner:
 		spawner.connect("note_spawned", Callable(self, "_on_note_spawned"))
 		# Example chart (time in seconds). Replace or load from Charts directory.
@@ -62,7 +64,12 @@ func _ready() -> void:
 			print("[GameManager] Warning: hit_y (%s) is outside viewport height (%s). Adjust GameManager.hit_y in the inspector." % [str(hit_y), str(vh)])
 
 func _on_note_spawned(note) -> void:
-	note.connect("hit", Callable(self, "_on_note_hit"))
+	if note.has_method("on_hit_start"):  # It's a hold note
+		note.connect("hit_start", Callable(self, "_on_hold_note_start"))
+		note.connect("hit_end", Callable(self, "_on_hold_note_end"))
+		note.connect("missed", Callable(self, "_on_hold_note_missed"))
+	else:  # Regular note
+		note.connect("hit", Callable(self, "_on_note_hit"))
 	active_notes.append(note)
 
 func _on_note_hit(note) -> void:
@@ -89,18 +96,88 @@ func _on_key_pressed(lane: int) -> void:
 	var best_dist = hit_tolerance + 1
 	for note in active_notes:
 		if note.lane == lane:
-			var dist = abs(note.position.y - hit_y)
-			if dist <= hit_tolerance and dist < best_dist:
-				best_dist = dist
-				best_note = note
+			# Check if it's a hold note
+			if note.has_method("is_hittable_start") and note.is_hittable_start(hit_y, hit_tolerance):
+				var dist = abs(note.position.y - hit_y)
+				if dist < best_dist:
+					best_dist = dist
+					best_note = note
+			# Regular note
+			elif note.has_method("is_hittable") and note.is_hittable(hit_y, hit_tolerance):
+				var dist = abs(note.position.y - hit_y)
+				if dist < best_dist:
+					best_dist = dist
+					best_note = note
+	
 	if best_note:
-		best_note.on_hit()
+		if best_note.has_method("on_hit_start"):
+			# Hold note start
+			best_note.on_hit_start()
+			active_hold_notes[lane] = best_note
+		else:
+			# Regular note
+			best_note.on_hit()
 	else:
 		notes_missed += 1
 		current_combo = 0
 		print("Miss on lane", lane)
 		if hud:
 			hud.show_feedback("Miss")
+
+func _on_key_released(lane: int) -> void:
+	if active_hold_notes.has(lane):
+		var hold_note = active_hold_notes[lane]
+		# Check if tail reached hit line
+		if hold_note.is_hittable_end(hit_y, hit_tolerance):
+			hold_note.on_hit_end()
+		else:
+			# Released too early
+			hold_note.on_release_early()
+		active_hold_notes.erase(lane)
+
+func _on_hold_note_start(note) -> void:
+	score += 50  # Bonus for starting hold
+	if hud:
+		hud.set_score(score)
+		hud.show_feedback("Hold!")
+	
+	# spawn a hit effect at the note's lane and hit Y
+	var spawner = get_parent().get_node_or_null("NoteSpawner")
+	if spawner:
+		var fx = _hit_effect_scene.instantiate()
+		fx.position = Vector2(spawner.lanes_x[note.lane], hit_y)
+		get_parent().add_child(fx)
+
+func _on_hold_note_end(note) -> void:
+	score += 100  # Bonus for completing hold
+	notes_hit += 1
+	current_combo += 1
+	if current_combo > max_combo:
+		max_combo = current_combo
+	active_notes.erase(note)
+	print("Hold Complete! Score:", score)
+	if hud:
+		hud.set_score(score)
+		hud.show_feedback("Perfect!")
+	
+	# spawn a hit effect
+	var spawner = get_parent().get_node_or_null("NoteSpawner")
+	if spawner:
+		var fx = _hit_effect_scene.instantiate()
+		fx.position = Vector2(spawner.lanes_x[note.lane], hit_y)
+		get_parent().add_child(fx)
+
+func _on_hold_note_missed(note) -> void:
+	notes_missed += 1
+	current_combo = 0
+	active_notes.erase(note)
+	# Remove from active holds if present
+	for lane in active_hold_notes.keys():
+		if active_hold_notes[lane] == note:
+			active_hold_notes.erase(lane)
+			break
+	if hud:
+		hud.show_feedback("Miss")
 
 func load_chart(path: String, spawner) -> void:
 	var f = FileAccess.open(path, FileAccess.ModeFlags.READ)
