@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6gjeaee57w5f"]
+[gd_scene load_steps=7 format=3 uid="uid://b6gjeaee57w5f"]
 
 [ext_resource type="Script" uid="uid://d1e0nuf73sye2" path="res://CoreGameplay/GameManager.gd" id="1"]
 [ext_resource type="Script" uid="uid://bwfkw78koegwn" path="res://CoreGameplay/NoteSpawner.gd" id="2"]
 [ext_resource type="Script" uid="uid://b245b8lutekyf" path="res://CoreGameplay/Piano.gd" id="3"]
 [ext_resource type="PackedScene" path="res://CoreGameplay/Note.tscn" id="4"]
 [ext_resource type="Script" uid="uid://cdf4srfquv6od" path="res://CoreGameplay/HUD.gd" id="5"]
+[ext_resource type="PackedScene" path="res://CoreGameplay/PauseMenu.tscn" id="6"]
 
 [node name="Main" type="Node2D"]
 
@@ -40,3 +41,5 @@ offset_left = 12.0
 offset_top = 44.0
 offset_right = 12.0
 offset_bottom = 44.0
+
+[node name="PauseMenu" parent="." instance=ExtResource("6")]
