@@ -52,6 +52,14 @@ text = "Play"
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
+[node name="WorkshopButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Workshop"
+
+[node name="Spacer3" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Quit"
