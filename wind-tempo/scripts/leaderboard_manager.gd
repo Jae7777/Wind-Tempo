@@ -33,6 +33,7 @@ class Score:
 # Leaderboard for a single song
 class Leaderboard:
 	var song_name: String = ""
+	var difficulty: int = 0  # 0=Easy, 1=Normal, 2=Hard, 3=Expert
 	var scores: Array[Score] = []
 	var max_scores: int = 10
 	
@@ -48,7 +49,7 @@ class Leaderboard:
 			return true
 		return false
 
-    func _sort_scores() -> void:
+	func _sort_scores() -> void:
 		scores.sort_custom(func(a, b): return a.score > b.score)
 	
 	func to_dict() -> Dictionary:
@@ -57,12 +58,14 @@ class Leaderboard:
 			score_dicts.append(s.to_dict())
 		return {
 			"song_name": song_name,
+			"difficulty": difficulty,
 			"scores": score_dicts
 		}
 	
 	static func from_dict(data: Dictionary) -> Leaderboard:
 		var lb = Leaderboard.new()
 		lb.song_name = data.get("song_name", "Unknown")
+		lb.difficulty = data.get("difficulty", 0)
 		for score_data in data.get("scores", []):
 			lb.scores.append(Score.from_dict(score_data))
 		return lb
@@ -90,18 +93,20 @@ func load_all_leaderboards() -> void:
 				load_leaderboard(song_name)
 			file_name = dir.get_next()
 
-func load_leaderboard(song_name: String) -> Leaderboard:
-	"""Load a leaderboard for a specific song"""
-	if leaderboards.has(song_name):
-		return leaderboards[song_name]
+func load_leaderboard(song_name: String, difficulty: int = 1) -> Leaderboard:
+	"""Load a leaderboard for a specific song and difficulty"""
+	var key = song_name + "_" + str(difficulty)
+	if leaderboards.has(key):
+		return leaderboards[key]
 	
-	var path = LEADERBOARD_PATH + song_name + ".json"
+	var path = LEADERBOARD_PATH + key + ".json"
 	var file = FileAccess.open(path, FileAccess.READ)
 	
 	if file == null:
 		var lb = Leaderboard.new()
 		lb.song_name = song_name
-		leaderboards[song_name] = lb
+		lb.difficulty = difficulty
+		leaderboards[key] = lb
 		return lb
 	
 	var json = JSON.new()
@@ -110,25 +115,26 @@ func load_leaderboard(song_name: String) -> Leaderboard:
 	
 	if data is Dictionary:
 		var lb = Leaderboard.from_dict(data)
-		leaderboards[song_name] = lb
+		leaderboards[key] = lb
 		return lb
-	
 	var lb = Leaderboard.new()
 	lb.song_name = song_name
-	leaderboards[song_name] = lb
+	lb.difficulty = difficulty
+	leaderboards[key] = lb
 	return lb
 
-func save_leaderboard(song_name: String) -> bool:
+func save_leaderboard(song_name: String, difficulty: int = 1) -> bool:
 	"""Save a leaderboard to disk"""
-	if not leaderboards.has(song_name):
+	var key = song_name + "_" + str(difficulty)
+	if not leaderboards.has(key):
 		return false
 	
 	var dir = DirAccess.open("user://")
 	if dir and not dir.dir_exists("leaderboards"):
 		dir.make_dir("leaderboards")
 	
-	var path = LEADERBOARD_PATH + song_name + ".json"
-	var lb = leaderboards[song_name]
+	var path = LEADERBOARD_PATH + key + ".json"
+	var lb = leaderboards[key]
 	var json_str = JSON.stringify(lb.to_dict())
 	
 	var file = FileAccess.open(path, FileAccess.WRITE)
@@ -137,21 +143,21 @@ func save_leaderboard(song_name: String) -> bool:
 		return true
 	return false
 
-func add_score(song_name: String, score: Score) -> bool:
-	"""Add a score to a song's leaderboard"""
-	var lb = load_leaderboard(song_name)
+func add_score(song_name: String, score: Score, difficulty: int = 1) -> bool:
+	"""Add a score to a song's leaderboard for a difficulty"""
+	var lb = load_leaderboard(song_name, difficulty)
 	var made_top_10 = lb.add_score(score)
 	if made_top_10:
-		save_leaderboard(song_name)
+		save_leaderboard(song_name, difficulty)
 	return made_top_10
 
-func get_leaderboard(song_name: String) -> Leaderboard:
-	"""Get a leaderboard for a song"""
-	return load_leaderboard(song_name)
+func get_leaderboard(song_name: String, difficulty: int = 1) -> Leaderboard:
+	"""Get a leaderboard for a song and difficulty"""
+	return load_leaderboard(song_name, difficulty)
 
-func get_player_rank(song_name: String) -> int:
+func get_player_rank(song_name: String, difficulty: int = 1) -> int:
 	"""Get player's rank on a leaderboard (-1 if not ranked)"""
-	var lb = load_leaderboard(song_name)
+	var lb = load_leaderboard(song_name, difficulty)
 	for i in range(lb.scores.size()):
 		if lb.scores[i].player_name == "Player":
 			return i + 1

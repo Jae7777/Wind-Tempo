@@ -21,6 +21,7 @@ MidiInput="*res://scripts/midi_input.gd"
 SongManager="*res://scripts/song_manager.gd"
 SettingsManager="*res://scripts/settings_manager.gd"
 LeaderboardManager="*res://scripts/leaderboard_manager.gd"
+DifficultyManager="*res://scripts/difficulty_manager.gd"
 
 
 [display]
