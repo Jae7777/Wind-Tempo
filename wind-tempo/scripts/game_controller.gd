@@ -223,6 +223,11 @@ func _save_score_to_leaderboard() -> void:
 	if not song_manager or not song_manager.current_chart:
 		return
 	
+	var difficulty_manager = get_node_or_null("/root/DifficultyManager")
+	var difficulty = 1  # Default to normal
+	if difficulty_manager:
+		difficulty = difficulty_manager.current_difficulty
+	
 	var song_name = song_manager.current_chart.title
 	var lb_manager = get_node_or_null("/root/LeaderboardManager")
 	if lb_manager:
@@ -233,7 +238,7 @@ func _save_score_to_leaderboard() -> void:
 		score.combo = stats.max_combo
 		score.rank = stats.rank
 		score.timestamp = Time.get_ticks_msec() / 1000.0
-		lb_manager.add_score(song_name, score)
+		lb_manager.add_score(song_name, score, difficulty)
 
 func _show_stats_panel() -> void:
 	if not stats_panel or not score_zone:

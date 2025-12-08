@@ -36,6 +36,16 @@ var miss_count: int = 0
 
 func _ready() -> void:
 	queue_redraw()
+	_apply_difficulty_modifiers()
+
+func _apply_difficulty_modifiers() -> void:
+	"""Apply timing window modifiers based on difficulty"""
+	var difficulty_manager = get_node_or_null("/root/DifficultyManager")
+	if difficulty_manager:
+		var modifier = difficulty_manager.get_timing_modifier()
+		perfect_window *= modifier
+		good_window *= modifier
+		miss_window *= modifier
 
 func set_notes_container(container: Node2D) -> void:
 	notes_container = container
@@ -100,24 +110,31 @@ func _register_hit(hit_type: String, lane: int, base_points: int) -> Dictionary:
 	else:
 		good_count += 1
 	
-	var multiplier := _get_combo_multiplier()
-	var final_points := int(base_points * multiplier)
+	var combo_multiplier := _get_combo_multiplier()
+	var difficulty_multiplier := _get_difficulty_multiplier()
+	var final_points := int(base_points * combo_multiplier * difficulty_multiplier)
 	score += final_points
 	
 	var result := {
 		"hit_type": hit_type,
 		"lane": lane,
 		"points": final_points,
-		"multiplier": multiplier,
+		"multiplier": combo_multiplier,
 		"label": _get_lane_label(lane)
 	}
 	
-	hit_registered.emit(hit_type, lane, final_points, multiplier)
-	combo_updated.emit(current_combo, multiplier)
+	hit_registered.emit(hit_type, lane, final_points, combo_multiplier)
+	combo_updated.emit(current_combo, combo_multiplier)
 	_emit_stats()
 	
 	return result
 
+func _get_difficulty_multiplier() -> float:
+	"""Get score multiplier based on difficulty"""
+	var difficulty_manager = get_node_or_null("/root/DifficultyManager")
+	if difficulty_manager:
+		return difficulty_manager.get_score_multiplier()
+	return 1.0
 func _register_miss(lane: int) -> void:
 	current_combo = 0
 	miss_count += 1

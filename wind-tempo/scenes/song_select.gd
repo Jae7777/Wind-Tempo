@@ -6,6 +6,7 @@ extends Control
 @onready var play_button: Button = $VBoxContainer/ButtonRow/PlayButton
 @onready var back_button: Button = $VBoxContainer/ButtonRow/BackButton
 @onready var leaderboard_button: Button = $VBoxContainer/ButtonRow/LeaderboardButton
+@onready var difficulty_option: OptionButton = $VBoxContainer/DifficultyRow/DifficultyOption
 @onready var midi_status: Label = $VBoxContainer/MidiStatus
 
 var songs: Array[Dictionary] = []
@@ -17,12 +18,31 @@ func _ready() -> void:
 	leaderboard_button.pressed.connect(_on_leaderboard_pressed)
 	song_list.item_selected.connect(_on_song_selected)
 	song_list.item_activated.connect(_on_song_activated)
+	difficulty_option.item_selected.connect(_on_difficulty_selected)
 	
+	_setup_difficulty_options()
 	# Update MIDI status
 	_update_midi_status()
 	
 	# Scan for songs
 	_refresh_song_list()
+
+func _setup_difficulty_options() -> void:
+	"""Setup difficulty selector"""
+	if not difficulty_option:
+		return
+	difficulty_option.clear()
+	difficulty_option.add_item("⭐ Easy")
+	difficulty_option.add_item("⭐⭐ Normal")
+	difficulty_option.add_item("⭐⭐⭐ Hard")
+	difficulty_option.add_item("⭐⭐⭐⭐ Expert")
+	difficulty_option.selected = 1
+
+func _on_difficulty_selected(index: int) -> void:
+	"""Update selected difficulty"""
+	var difficulty_manager = get_node_or_null("/root/DifficultyManager")
+	if difficulty_manager:
+		difficulty_manager.set_difficulty(index)
 
 func _update_midi_status() -> void:
 	var midi_input = get_node_or_null("/root/MidiInput")
