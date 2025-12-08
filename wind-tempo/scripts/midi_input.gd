@@ -71,8 +71,8 @@ func _handle_midi_event(midi: InputEventMIDI) -> void:
 		MIDI_CONTROL_CHANGE:
 			# Handle sustain pedal (CC 64)
 			if midi.controller_number == 64:
-				if midi.controller_value < 64:
-					pass  # Pedal released
+				if midi.controller_value >= 64:
+					pass  # Pedal pressed
 
 func get_note_name(midi_note: int) -> String:
 	"""Get the note name (e.g., 'C4', 'F#5') from MIDI note number"""

@@ -82,6 +82,10 @@ func spawn_note(lane: int, velocity: int = 100) -> Node2D:
 		push_warning("NoteSpawner: lane_manager not found")
 		return null
 	
+	if lane < 0 or lane >= lane_manager.lane_count:
+		push_warning("NoteSpawner: Lane %d out of bounds (0-%d)" % [lane, lane_manager.lane_count - 1])
+		return null
+	
 	var lane_x := lane_manager.get_lane_x(lane)
 	var lane_width := lane_manager.get_lane_width()
 	

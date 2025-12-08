@@ -75,7 +75,10 @@ func _show_category(category: Control) -> void:
 	category.visible = true
 
 func _update_ui() -> void:
-	var sm = get_node("/root/SettingsManager")
+	var sm = get_node_or_null("/root/SettingsManager")
+	if not sm:
+		push_warning("Settings: SettingsManager not found")
+		return
 	
 	# Gameplay
 	note_speed_slider.value = sm.note_travel_time
@@ -117,43 +120,50 @@ func _on_refresh_pressed() -> void:
 	_refresh_midi_devices()
 
 func _on_note_speed_changed(value: float) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.note_travel_time = value
-	note_speed_label.text = "%.1fs" % value
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.note_travel_time = value
+		note_speed_label.text = "%.1fs" % value
+		sm.save_settings()
 
 func _on_master_volume_changed(value: float) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.master_volume = value
-	master_volume_label.text = "%d%%" % int(value * 100)
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.master_volume = value
+		master_volume_label.text = "%d%%" % int(value * 100)
+		sm.save_settings()
 
 func _on_music_volume_changed(value: float) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.music_volume = value
-	music_volume_label.text = "%d%%" % int(value * 100)
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.music_volume = value
+		music_volume_label.text = "%d%%" % int(value * 100)
+		sm.save_settings()
 
 func _on_sfx_volume_changed(value: float) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.sfx_volume = value
-	sfx_volume_label.text = "%d%%" % int(value * 100)
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.sfx_volume = value
+		sfx_volume_label.text = "%d%%" % int(value * 100)
+		sm.save_settings()
 
 func _on_window_mode_selected(index: int) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.window_mode = index
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.window_mode = index
+		sm.save_settings()
 
 func _on_vsync_toggled(toggled_on: bool) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.vsync_enabled = toggled_on
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.vsync_enabled = toggled_on
+		sm.save_settings()
 
 func _on_msaa_selected(index: int) -> void:
-	var sm = get_node("/root/SettingsManager")
-	sm.msaa_value = index
-	sm.save_settings()
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm:
+		sm.msaa_value = index
+		sm.save_settings()
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

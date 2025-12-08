@@ -148,7 +148,7 @@ func _get_combo_multiplier() -> float:
 	if current_combo < combo_multiplier_threshold:
 		return 1.0
 	var extra := current_combo - combo_multiplier_threshold
-	return minf(1.0 + float(extra / combo_multiplier_increment), max_combo_multiplier)
+	return minf(1.0 + float(extra) / float(combo_multiplier_increment), max_combo_multiplier)
 
 func _emit_stats() -> void:
 	stats_updated.emit(get_stats())
