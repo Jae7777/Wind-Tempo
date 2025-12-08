@@ -42,11 +42,14 @@ class Leaderboard:
 			scores.append(score)
 			_sort_scores()
 			return true
-		if score.score > scores[max_scores - 1].score:
+		elif score.score > scores[max_scores - 1].score:
 			scores[max_scores - 1] = score
 			_sort_scores()
 			return true
 		return false
+
+    func _sort_scores() -> void:
+		scores.sort_custom(func(a, b): return a.score > b.score)
 	
 	func to_dict() -> Dictionary:
 		var score_dicts = []
