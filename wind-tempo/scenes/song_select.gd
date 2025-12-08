@@ -5,6 +5,7 @@ extends Control
 @onready var song_info: Label = $VBoxContainer/InfoPanel/SongInfo
 @onready var play_button: Button = $VBoxContainer/ButtonRow/PlayButton
 @onready var back_button: Button = $VBoxContainer/ButtonRow/BackButton
+@onready var leaderboard_button: Button = $VBoxContainer/ButtonRow/LeaderboardButton
 @onready var midi_status: Label = $VBoxContainer/MidiStatus
 
 var songs: Array[Dictionary] = []
@@ -13,6 +14,7 @@ var selected_index: int = -1
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 	back_button.pressed.connect(_on_back_pressed)
+	leaderboard_button.pressed.connect(_on_leaderboard_pressed)
 	song_list.item_selected.connect(_on_song_selected)
 	song_list.item_activated.connect(_on_song_activated)
 	

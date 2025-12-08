@@ -207,10 +207,33 @@ func _update_accuracy_ui(accuracy: float) -> void:
 func _on_song_complete() -> void:
 	song_finished = true
 	_show_stats_panel()
-	
+	_save_score_to_leaderboard()
+
 	var song_manager = get_node_or_null("/root/SongManager")
 	if song_manager and score_zone:
 		song_manager.song_ended.emit(score_zone.get_stats())
+
+func _save_score_to_leaderboard() -> void:
+	"""Save the current game score to the leaderboard"""
+	if not score_zone:
+		return
+	
+	var stats = score_zone.get_stats()
+	var song_manager = get_node_or_null("/root/SongManager")
+	if not song_manager or not song_manager.current_chart:
+		return
+	
+	var song_name = song_manager.current_chart.title
+	var lb_manager = get_node_or_null("/root/LeaderboardManager")
+	if lb_manager:
+		var score = lb_manager.Score.new()
+		score.player_name = "Player"
+		score.score = stats.score
+		score.accuracy = stats.accuracy
+		score.combo = stats.max_combo
+		score.rank = stats.rank
+		score.timestamp = Time.get_ticks_msec() / 1000.0
+		lb_manager.add_score(song_name, score)
 
 func _show_stats_panel() -> void:
 	if not stats_panel or not score_zone:
