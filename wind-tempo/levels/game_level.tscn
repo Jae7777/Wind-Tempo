@@ -28,76 +28,102 @@ texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
 key_template = NodePath("../FallingD")
 key_name = "button_j"
+spawn_x_position = 70.0
 
-[node name="E" type="Sprite2D" parent="."]
+[node name="E" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-23, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingE")
 key_name = "button_k"
+spawn_x_position = 112.0
 
-[node name="F" type="Sprite2D" parent="."]
+[node name="F" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(19, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingF")
 key_name = "button_l"
+spawn_x_position = 154.0
 
-[node name="G" type="Sprite2D" parent="."]
+[node name="G" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(61, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingG")
 key_name = "button_;"
+spawn_x_position = 196.0
 
-[node name="A" type="Sprite2D" parent="."]
+[node name="A" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(103, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingA")
 key_name = "button_'"
+spawn_x_position = 238.0
 
-[node name="B" type="Sprite2D" parent="."]
+[node name="B" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(145, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingB")
 key_name = "button_enter"
+spawn_x_position = 280.0
 
-[node name="CSharp_DFlat" type="Sprite2D" parent="."]
+[node name="CSharp_DFlat" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-161, 233.00002)
 scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../Falling_CSharpDFlat")
 key_name = "button_u"
+spawn_x_position = -17.0
+spawn_y_position = -353.0
 
-[node name="DSharp_EFlat" type="Sprite2D" parent="."]
+[node name="DSharp_EFlat" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-114, 233)
 scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../Falling_DSharpEFlat")
 key_name = "button_i"
+spawn_x_position = 30.0
+spawn_y_position = -353.0
 
-[node name="FSharp_GFlat" type="Sprite2D" parent="."]
+[node name="FSharp_GFlat" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-33, 233)
 scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../Falling_FSharpGFlat")
 key_name = "button_o"
+spawn_x_position = 111.0
+spawn_y_position = -353.0
 
-[node name="GSharp_AFlat" type="Sprite2D" parent="."]
+[node name="GSharp_AFlat" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(9, 233)
 scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../Falling_GSharpAFlat")
 key_name = "button_p"
+spawn_x_position = 153.0
+spawn_y_position = -353.0
 
-[node name="ASharp_BFlat" type="Sprite2D" parent="."]
+[node name="ASharp_BFlat" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(50, 233)
 scale = Vector2(6, 6)
 texture = ExtResource("2_d65c1")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../Falling_ASharpBFlat")
 key_name = "button_["
+spawn_x_position = 194.0
+spawn_y_position = -353.0
 
 [node name="FallingC" type="Sprite2D" parent="."]
 position = Vector2(28, -350)
