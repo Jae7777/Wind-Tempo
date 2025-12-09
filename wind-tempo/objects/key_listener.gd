@@ -2,10 +2,19 @@
 
 extends Sprite2D
 
-# This will be our TEMPLATE. Drag the pre-placed FallingKey node (e.g., FallingC) here.
+# The template for the key to be spawned (e.g., FallingC)
 @export var key_template: Sprite2D
 
+# The input action to listen for (e.g., "button_j")
 @export var key_name: String = ""
+
+# The X-coordinate where the new key should spawn.
+@export var spawn_x_position: float = 0.0
+
+# --- NEW VARIABLE ---
+# The Y-coordinate where the new key should spawn.
+@export var spawn_y_position: float = -350.0
+
 
 func _process(delta):
 		if Input.is_action_just_pressed(key_name):
@@ -16,21 +25,13 @@ func create_falling_key():
 				print("Error: No key_template assigned to ", name)
 				return
 
-		# Create a new key by duplicating the template.
-		# This copies all its properties, including the texture!
 		var new_key = key_template.duplicate()
-
-		# Add the new key to the scene. Adding it to the same parent as the
-		# listener is a good place.
 		get_parent().add_child(new_key)
 
-	#DEBUG PRINT
-		print("Listener '", name, "' is sending global_position.x: ", global_position.x)
-
-		# Call the Setup function on the new duplicate to position it and turn it on.
+		# --- UPDATED LINE ---
+		# Pass BOTH the X and Y spawn positions to the Setup function.
 		if new_key.has_method("Setup"):
-				new_key.Setup(global_position.x)
+				new_key.Setup(spawn_x_position, spawn_y_position)
 		else:
-				# This is a safety check in case the script is missing on the template.
 				print("Error: The duplicated key is missing the Setup() function.")
 				new_key.queue_free()

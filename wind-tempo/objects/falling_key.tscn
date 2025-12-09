@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dwv0rh181f3y0"]
 
-[ext_resource type="Script" uid="uid://dlcwmpdtgpece" path="res://objects/white_falling_key.gd" id="1_snaos"]
+[ext_resource type="Script" uid="uid://dlcwmpdtgpece" path="res://objects/falling_key.gd" id="1_snaos"]
 [ext_resource type="Texture2D" uid="uid://e73vp1duao4f" path="res://art/white key (pressed).png" id="1_uuajb"]
 
 [node name="FallingKey" type="Sprite2D"]

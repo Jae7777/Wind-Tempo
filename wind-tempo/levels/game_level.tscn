@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="2_n0b0m"]
 [ext_resource type="Texture2D" uid="uid://e73vp1duao4f" path="res://art/white key (pressed).png" id="4_n0b0m"]
 [ext_resource type="Texture2D" uid="uid://6ahg38pso3hu" path="res://art/black key (pressed).png" id="5_2i5ty"]
-[ext_resource type="Script" uid="uid://dlcwmpdtgpece" path="res://objects/white_falling_key.gd" id="5_wtvao"]
+[ext_resource type="Script" uid="uid://dlcwmpdtgpece" path="res://objects/falling_key.gd" id="5_wtvao"]
 
 [node name="GameLevel" type="Node2D"]
 metadata/_edit_vertical_guides_ = [-429.0]
@@ -19,6 +19,7 @@ texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
 key_template = NodePath("../FallingC")
 key_name = "button_space"
+spawn_x_position = 28.0
 
 [node name="D" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-65, 316)
