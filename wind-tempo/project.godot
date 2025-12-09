@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 MidiInput="*res://scripts/midi_input.gd"
 SongManager="*res://scripts/song_manager.gd"
 SettingsManager="*res://scripts/settings_manager.gd"
+PauseManager="*res://scripts/pause_manager.gd"
 
 [display]
 

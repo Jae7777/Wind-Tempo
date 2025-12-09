@@ -22,8 +22,12 @@ enum GameMode { PRACTICE, SONG }
 
 # State
 var song_finished: bool = false
+var pause_manager: Node = null
 
 func _ready() -> void:
+	# Get pause manager reference
+	pause_manager = get_node_or_null("/root/PauseManager")
+	
 	# Auto-find components if not set
 	if lane_manager == null:
 		lane_manager = _find_child_of_type(LaneManager) as LaneManager
