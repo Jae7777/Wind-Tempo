@@ -12,18 +12,20 @@ metadata/_edit_vertical_guides_ = [-429.0]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="C" type="Sprite2D" parent="."]
+[node name="C" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-107, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingC")
 key_name = "button_space"
 
-[node name="D" type="Sprite2D" parent="."]
+[node name="D" type="Sprite2D" parent="." node_paths=PackedStringArray("key_template")]
 position = Vector2(-65, 316)
 scale = Vector2(5, 5)
 texture = ExtResource("1_sklrn")
 script = ExtResource("2_n0b0m")
+key_template = NodePath("../FallingD")
 key_name = "button_j"
 
 [node name="E" type="Sprite2D" parent="."]

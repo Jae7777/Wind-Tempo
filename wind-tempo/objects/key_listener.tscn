@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://b7qcxxx6uq2t1"]
+[gd_scene load_steps=2 format=3 uid="uid://b7qcxxx6uq2t1"]
+
+[ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="1_181ek"]
 
 [node name="KeyListener" type="Sprite2D"]
+script = ExtResource("1_181ek")

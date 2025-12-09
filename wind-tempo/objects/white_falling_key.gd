@@ -1,35 +1,30 @@
+# In white_falling_key.gd
+
 extends Sprite2D
 
-@export var fall_speed: float = 3
+@export var fall_speed: float = 200.0
+@export var init_y_pos: float = -350.0
 
-#-350 for White Key
-#-353 for Black Key
-var init_y_pos: float = -350
-
-#Make sure Setup() is called on the instance, and the FK is initialized to not fall
-func _init():
-	set_process(false)
-
-#Just a testing statement to ensure that it's running
-func _ready() -> void:
-	if has_node("Timer"):
-		$Timer.start()            
-		print(name, "Timer started wait_time=", $Timer.wait_time)
+func _ready():
+		# Make the original template nodes invisible and stop them from processing.
+		# The copies we make will be made visible manually.
+		visible = false
+		set_process(false)
 
 func _process(delta):
-	global_position += Vector2(0, fall_speed)
-
-#REMEMBER TO CHANGE:
-#316 Y-level for White Keys
-#266 Y-level for Black Keys
-	if global_position.y > 266.0 and not $Timer.is_stopped():
-		print($Timer.wait_time - $Timer.time_left)
-		$Timer.stop()
-		
-		
-		#3.66 Seconds for White Key
-		#3.39 Seconds for Black Key
-func Setup(target_x: float):
-	global_position = Vector2(target_x, init_y_pos)
-	set_process(true)
 	
+		# Move the key down
+		global_position.y += fall_speed * delta
+		
+		# Clean up the key when it goes off-screen
+		if global_position.y > get_viewport_rect().size.y + 50:
+				queue_free()
+
+# This function will be called on the NEWLY CREATED key
+func Setup(target_x: float):
+		# Let's see what X-position we received and where we are moving.
+		print("New key received target_x: ", target_x, ". Setting global_position.")
+		global_position = Vector2(target_x, init_y_pos)
+		# Make the new copy visible and start its movement
+		visible = true
+		set_process(true)
