@@ -5,14 +5,9 @@ extends Sprite2D
 
 func _process(delta):
 		if Input.is_action_just_pressed(key_name):
-				print(key_name)
+				CreateFallingKey()
 
-#func _process(delta):
-#		if Input.is_action_just_pressed(key_name):
-#			CreateFallingKey()
-
-
-#func CreateFallingKey():
-#	var fk_inst = falling_key.instantiate()
-#	get_tree().get_root().call_deferred("add_child", fk_inst)
-#	fk_inst.SetUp(position.x)
+func CreateFallingKey(): 
+	var fk_inst = falling_key.instantiate()
+	get_tree().get_root().call_deferred("add_child", fk_inst)
+	fk_inst.Setup(position.x)
