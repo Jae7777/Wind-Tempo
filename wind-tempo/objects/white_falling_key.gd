@@ -32,3 +32,4 @@ func _process(delta):
 func Setup(target_x: float):
 	global_position = Vector2(target_x, init_y_pos)
 	set_process(true)
+	
