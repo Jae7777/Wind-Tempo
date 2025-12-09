@@ -1,0 +1,192 @@
+[gd_scene load_steps=13 format=3 uid="uid://bgenq3i0mmhtg"]
+
+[ext_resource type="Script" uid="uid://ulgilp6twdk4" path="res://pause_icon.gd" id="1_62e2m"]
+[ext_resource type="Texture2D" uid="uid://cj1st7m5oomva" path="res://background_img.png" id="1_qtu10"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbet"]
+content_margin_left = 20.0
+content_margin_top = 30.0
+content_margin_right = 20.0
+content_margin_bottom = 30.0
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.26666668, 0.26666668, 0.26666668, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_0fbet"]
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+grow_begin = 2.0
+grow_end = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62e2m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtu10"]
+bg_color = Color(0.22745098, 0.22745098, 0.22745098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62e2m"]
+bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtu10"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee4bf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kbped"]
+bg_color = Color(0.22745098, 0.22745098, 0.22745098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fj5cn"]
+bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iy58a"]
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundImage" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qtu10")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="MainPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0fbet")
+
+[node name="MenuVBox" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TitleHBox" type="HBoxContainer" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="PauseIcon" type="TextureRect" parent="MainPanel/MenuVBox/TitleHBox"]
+custom_minimum_size = Vector2(15, 20)
+layout_mode = 2
+script = ExtResource("1_62e2m")
+
+[node name="TitleLabel" type="Label" parent="MainPanel/MenuVBox/TitleHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "PAUSE"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="ResumeButton" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_62e2m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qtu10")
+theme_override_styles/hover = SubResource("StyleBoxFlat_62e2m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtu10")
+text = "Resume"
+
+[node name="HSeparator2" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Restart Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Restart Song"
+
+[node name="HSeparator3" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Option Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Options
+"
+
+[node name="HSeparator4" type="HSeparator" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_0fbet")
+
+[node name="Main Menu Button" type="Button" parent="MainPanel/MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee4bf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbped")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fj5cn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iy58a")
+text = "Main Manu"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.9
+offset_right = -0.9000244
+grow_horizontal = 2
+grow_vertical = 2
