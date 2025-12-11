@@ -14,6 +14,10 @@ config/name="Wind Tempo"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+ScoreManager="*res://objects/score_manager.gd"
+
 [display]
 
 window/stretch/mode="viewport"
