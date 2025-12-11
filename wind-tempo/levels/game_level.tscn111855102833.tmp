@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5ifyllxkwvqf"]
+
+[ext_resource type="Texture2D" uid="uid://bynygenara5cm" path="res://art/white key (unpressed).png" id="1_sklrn"]
+[ext_resource type="Texture2D" uid="uid://chj2ehf6envlg" path="res://art/black key (unpressed).png" id="2_d65c1"]
+[ext_resource type="Script" uid="uid://csniptwjdljj5" path="res://objects/key_listener.gd" id="2_n0b0m"]
+[ext_resource type="Texture2D" uid="uid://e73vp1duao4f" path="res://art/white key (pressed).png" id="4_n0b0m"]
+[ext_resource type="Texture2D" uid="uid://6ahg38pso3hu" path="res://art/black key (pressed).png" id="5_2i5ty"]
+[ext_resource type="Script" uid="uid://dlcwmpdtgpece" path="res://objects/falling_key.gd" id="5_wtvao"]
+
+[node name="GameLevel" type="Node2D"]
+metadata/_edit_vertical_guides_ = [-429.0]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="C" type="Sprite2D" parent="."]
+position = Vector2(-107, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="D" type="Sprite2D" parent="."]
+position = Vector2(-65, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="E" type="Sprite2D" parent="."]
+position = Vector2(-23, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="F" type="Sprite2D" parent="."]
+position = Vector2(19, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="G" type="Sprite2D" parent="."]
+position = Vector2(61, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="A" type="Sprite2D" parent="."]
+position = Vector2(103, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="B" type="Sprite2D" parent="."]
+position = Vector2(145, 316)
+scale = Vector2(5, 5)
+texture = ExtResource("1_sklrn")
+script = ExtResource("2_n0b0m")
+
+[node name="CSharp_DFlat" type="Sprite2D" parent="."]
+position = Vector2(-161, 233.00002)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+script = ExtResource("2_n0b0m")
+
+[node name="DSharp_EFlat" type="Sprite2D" parent="."]
+position = Vector2(-114, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+script = ExtResource("2_n0b0m")
+
+[node name="FSharp_GFlat" type="Sprite2D" parent="."]
+position = Vector2(-33, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+script = ExtResource("2_n0b0m")
+
+[node name="GSharp_AFlat" type="Sprite2D" parent="."]
+position = Vector2(9, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+script = ExtResource("2_n0b0m")
+
+[node name="ASharp_BFlat" type="Sprite2D" parent="."]
+position = Vector2(50, 233)
+scale = Vector2(6, 6)
+texture = ExtResource("2_d65c1")
+script = ExtResource("2_n0b0m")
