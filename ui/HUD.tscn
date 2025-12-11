@@ -1,0 +1,44 @@
+[gd_scene load_steps=1 format=3]
+
+[ext_resource type="Script" path="res://ui/HUD.gd" id="1"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1")
+
+[node name="ScoreLabel" type="Label"]
+anchors_left = 0.05
+anchors_top = 0.05
+anchors_right = 0.2
+anchors_bottom = 0.15
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Score: 0"
+
+[node name="ComboLabel" type="Label"]
+anchors_left = 0.05
+anchors_top = 0.2
+anchors_right = 0.2
+anchors_bottom = 0.3
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Combo: 0"
+
+[node name="JudgmentLabel" type="Label"]
+anchors_left = 0.4
+anchors_top = 0.75
+anchors_right = 0.6
+anchors_bottom = 0.85
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Perfect"
+alignment = 1
+
+[node name="AccuracyLabel" type="Label"]
+anchors_left = 0.8
+anchors_top = 0.05
+anchors_right = 0.95
+anchors_bottom = 0.15
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Accuracy: 0%"
+alignment = 2

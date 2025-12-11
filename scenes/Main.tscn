@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/Main.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/Spawner.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/InputHandler.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/JudgmentSystem.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/HitDetector.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/VisualFeedback.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/TimingDebugger.gd" id="7"]
+[ext_resource type="Script" path="res://ui/HUD.gd" id="8"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Highway" type="Node2D" parent="."]
+
+[node name="Spawner" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="InputHandler" type="Node" parent="."]
+script = ExtResource("3")
+
+[node name="JudgmentSystem" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="HitDetector" type="Node2D" parent="."]
+script = ExtResource("5")
+
+[node name="VisualFeedback" type="Node2D" parent="."]
+script = ExtResource("6")
+
+[node name="TimingDebugger" type="Node" parent="."]
+script = ExtResource("7")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("8")
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+anchors_left = 0.05
+anchors_top = 0.05
+anchors_right = 0.2
+anchors_bottom = 0.15
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Score: 0"
+label_settings = SubResource("LabelSettings")
+
+[node name="ComboLabel" type="Label" parent="HUD"]
+anchors_left = 0.05
+anchors_top = 0.2
+anchors_right = 0.2
+anchors_bottom = 0.3
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Combo: 0"
+
+[node name="JudgmentLabel" type="Label" parent="HUD"]
+anchors_left = 0.4
+anchors_top = 0.75
+anchors_right = 0.6
+anchors_bottom = 0.85
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Perfect"
+alignment = 1
+
+[node name="AccuracyLabel" type="Label" parent="HUD"]
+anchors_left = 0.8
+anchors_top = 0.05
+anchors_right = 0.95
+anchors_bottom = 0.15
+offset_right = 0.0
+offset_bottom = 0.0
+text = "Accuracy: 0%"
+alignment = 2
