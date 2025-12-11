@@ -1,36 +1,40 @@
+# objects/score_manager.gd
+# A global script to manage score, combo, and other gameplay stats.
 extends Node
 
 # Signals to notify the UI when values change
 signal score_updated(new_score)
 signal combo_updated(new_combo)
-signal accuracy_updated(new_accuracy)
 
 var score: int = 0
 var combo: int = 0
-var total_notes: int = 0
-var successful_hits: int = 0
 
-const HIT_SCORE = 100
+const PERFECT_HIT_SCORE = 10
+const GOOD_HIT_SCORE = 5
 
-func _ready():
-		# Reset everything when the game starts
-		reset()
-
-func add_hit():
-    """Called when the player successfully hits a note."""
+# Call this when a note is hit successfully
+func add_hit(hit_type: String):
 		combo += 1
-		score += HIT_SCORE * combo
-		total_notes += 1
-		successful_hits += 1
+		
+		if hit_type == "perfect":
+				score += PERFECT_HIT_SCORE * combo
+		elif hit_type == "good":
+				score += GOOD_HIT_SCORE * combo
 		
 		emit_signal("score_updated", score)
 		emit_signal("combo_updated", combo)
-		update_accuracy()
+		print("Hit! New score: ", score, " (Combo: ", combo, ")")
 
+# Call this when a note is missed
 func add_miss():
-    """Called when the player misses a note."""
+		if combo > 0:
+				print("Combo broken!")
 		combo = 0
-		total_notes += 1
-		
 		emit_signal("combo_updated", combo)
-		update_accuracy()
+
+# Resets the score for a new game
+func reset():
+		score = 0
+		combo = 0
+		emit_signal("score_updated", score)
+		emit_signal("combo_updated", combo)
