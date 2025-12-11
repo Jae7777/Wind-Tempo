@@ -1,0 +1,183 @@
+[gd_scene load_steps=6 format=3 uid="uid://opg0dixgcxcg"]
+
+[ext_resource type="Script" uid="uid://dd547ny3cykls" path="res://scenes/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://blpnod6yqv6le" path="res://branding/Wind Tempo Banner Light.png" id="2_bqqt6"]
+[ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://scenes/menu.tres" id="3_bqqt6"]
+
+[sub_resource type="Gradient" id="Gradient_wu84c"]
+colors = PackedColorArray(0.45490196, 0.6901961, 0.5647059, 1, 0.36078432, 0.7019608, 0.62352943, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8ln24"]
+gradient = SubResource("Gradient_wu84c")
+fill_to = Vector2(1, 1)
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("key_play", "key_settings", "key_workshops", "key_exit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6cm7")
+key_play = NodePath("RightContent/Grid/HBoxContainer/PlayButton")
+key_settings = NodePath("RightContent/Grid/HBoxContainer2/SettingsButton")
+key_workshops = NodePath("RightContent/Grid/HBoxContainer3/WorkshopButton")
+key_exit = NodePath("RightContent/Grid/HBoxContainer4/ExitButton")
+
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_8ln24")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.17438272
+anchor_right = 1.0
+anchor_bottom = 0.537037
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Wind Tempo Logo" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 848.0
+offset_bottom = 365.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+texture = ExtResource("2_bqqt6")
+
+[node name="RightContent" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.22222222
+anchor_top = 0.3425926
+anchor_right = 0.7777778
+anchor_bottom = 0.9984568
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Grid" type="GridContainer" parent="RightContent"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RightContent/Grid"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="PlayButton" type="Button" parent="RightContent/Grid/HBoxContainer"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer/PlayButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_bqqt6")
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+text = "Play"
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="RightContent/Grid"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="SettingsButton" type="Button" parent="RightContent/Grid/HBoxContainer2"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer2/SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_bqqt6")
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+text = "Settings"
+vertical_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="RightContent/Grid"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="WorkshopButton" type="Button" parent="RightContent/Grid/HBoxContainer3"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer3/WorkshopButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_bqqt6")
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+text = "Workshop"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="RightContent/Grid"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="ExitButton" type="Button" parent="RightContent/Grid/HBoxContainer4"]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer4/ExitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_bqqt6")
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="RightContent/Grid/HBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("3_bqqt6")
+text = "Quit "

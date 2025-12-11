@@ -1,0 +1,142 @@
+[gd_scene load_steps=7 format=3 uid="uid://yny3xfryhkt3"]
+
+[ext_resource type="Script" uid="uid://c5q2og7qhej2x" path="res://scripts/game_controller.gd" id="1_controller"]
+[ext_resource type="PackedScene" uid="uid://bi8iow5w12nps" path="res://scenes/note.tscn" id="2_note"]
+[ext_resource type="Script" uid="uid://ctjw4guycsjmt" path="res://scripts/components/lane_manager.gd" id="3_lanes"]
+[ext_resource type="Script" uid="uid://cyxisvr8vf4vy" path="res://scripts/components/score_zone.gd" id="4_score"]
+[ext_resource type="Script" uid="uid://deic7pot40a8c" path="res://scripts/components/piano_keyboard.gd" id="5_piano"]
+[ext_resource type="Script" uid="uid://fqhbmnpj2wk1" path="res://scripts/components/note_spawner.gd" id="6_spawner"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_controller")
+game_mode = 1
+
+[node name="LaneManager" type="Node2D" parent="."]
+script = ExtResource("3_lanes")
+lane_count = 88
+lane_margin = 20.0
+show_lane_lines = true
+lane_line_width = 1.0
+lane_line_color = Color(1, 1, 1, 0.15)
+draw_edge_lines = true
+
+[node name="NoteSpawner" type="Node2D" parent="."]
+script = ExtResource("6_spawner")
+note_scene = ExtResource("2_note")
+spawn_y = -40.0
+spawn_interval_min = 0.5
+spawn_interval_max = 1.25
+practice_lane_min = 24
+practice_lane_max = 48
+
+[node name="NotesContainer" type="Node2D" parent="NoteSpawner"]
+
+[node name="ScoreZone" type="Node2D" parent="."]
+position = Vector2(640, 500)
+script = ExtResource("4_score")
+perfect_window = 20.0
+good_window = 45.0
+miss_window = 80.0
+perfect_points = 100
+good_points = 50
+combo_multiplier_threshold = 10
+combo_multiplier_increment = 10
+max_combo_multiplier = 4.0
+judge_line_color = Color(0.608157, 0.369178, 0.985126, 1)
+judge_line_height = 4.0
+
+[node name="PianoKeyboard" type="Node2D" parent="."]
+script = ExtResource("5_piano")
+white_key_color = Color(0.95, 0.95, 0.92, 1)
+black_key_color = Color(0.15, 0.15, 0.18, 1)
+key_pressed_color = Color(0.4, 0.8, 1, 1)
+show_note_labels = true
+keyboard_height = 120.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="FeedbackLabel" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 55.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 40
+text = "Score: 0"
+
+[node name="ComboLabel" type="Label" parent="UI"]
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 35
+
+[node name="AccuracyLabel" type="Label" parent="UI"]
+offset_left = 10.0
+offset_top = 110.0
+offset_right = 400.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 28
+text = "Accuracy: --.--%"
+
+[node name="StatsPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsLabel" type="Label" parent="UI/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "=== FINAL STATS ===
+
+Score: 0
+
+Perfect: 0
+Good: 0
+Miss: 0
+Total Notes: 0
+
+Accuracy: 0.00%
+
+Max Combo: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="UI/StatsPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -75.0
+offset_top = -50.0
+offset_right = 75.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "Back to Menu"

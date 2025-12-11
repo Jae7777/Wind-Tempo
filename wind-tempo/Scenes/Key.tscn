@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcf1gcfi4ag6k"]
+
+[ext_resource type="Texture2D" uid="uid://b2pkno7qt04dk" path="res://Piano/Piano Keys Transparent Background.png" id="1_og2wv"]
+
+[node name="Key" type="Node2D"]
+
+[node name="Visual" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_og2wv")

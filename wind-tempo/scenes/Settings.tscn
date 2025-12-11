@@ -1,0 +1,350 @@
+[gd_scene load_steps=3 format=3 uid="uid://bduoje8adu4yk"]
+
+[ext_resource type="Script" uid="uid://x0ysd7mwo6vj" path="res://scenes/settings.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://scenes/menu.tres" id="2_i47rn"]
+
+[node name="Settings" type="Control" node_paths=PackedStringArray("gameplay_btn", "graphics_btn", "audio_btn", "input_btn", "back_button", "gameplay_container", "graphics_container", "audio_container", "input_container", "midi_device_list", "refresh_button", "note_speed_slider", "note_speed_label", "master_volume_slider", "master_volume_label", "music_volume_slider", "music_volume_label", "sfx_volume_slider", "sfx_volume_label", "window_mode_btn", "vsync_btn", "msaa_btn")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+gameplay_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/GameplayBtn")
+graphics_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/GraphicsBtn")
+audio_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/AudioBtn")
+input_btn = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/InputBtn")
+back_button = NodePath("HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer/BackButton")
+gameplay_container = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings")
+graphics_container = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings")
+audio_container = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings")
+input_container = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings")
+midi_device_list = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings/DeviceList")
+refresh_button = NodePath("HBoxContainer/RightPanel/MarginContainer/InputSettings/RefreshButton")
+note_speed_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow/NoteSpeedSlider")
+note_speed_label = NodePath("HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow/NoteSpeedValue")
+master_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow/VolumeSlider")
+master_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow/VolumeValue")
+music_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow/VolumeSlider")
+music_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow/VolumeValue")
+sfx_volume_slider = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow/VolumeSlider")
+sfx_volume_label = NodePath("HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow/VolumeValue")
+window_mode_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow/WindowModeBtn")
+vsync_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow/VSyncBtn")
+msaa_btn = NodePath("HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow/MSAABtn")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.008202022, 0.008202025, 0.008202025, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftPanel" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+color = Color(0.08, 0.08, 0.08, 1)
+
+[node name="Title" type="Label" parent="HBoxContainer/LeftPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme = ExtResource("2_i47rn")
+theme_override_colors/font_color = Color(0.4010223, 0.79802966, 0.64853233, 1)
+theme_override_font_sizes/font_size = 48
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GameplayBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "GAMEPLAY"
+flat = true
+alignment = 0
+
+[node name="GraphicsBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "GRAPHICS"
+flat = true
+alignment = 0
+
+[node name="AudioBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "AUDIO"
+flat = true
+alignment = 0
+
+[node name="InputBtn" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "CONTROLS"
+flat = true
+alignment = 0
+
+[node name="BackButton" type="Button" parent="HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "BACK"
+flat = true
+alignment = 0
+
+[node name="RightPanel" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="GameplaySettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5304361, 0.7663613, 0.6929174, 1)
+theme_override_font_sizes/font_size = 36
+text = "GAMEPLAY"
+
+[node name="NoteSpeedRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Note Travel Time"
+
+[node name="NoteSpeedSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 4.0
+step = 0.1
+value = 2.0
+
+[node name="NoteSpeedValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GameplaySettings/NoteSpeedRow"]
+layout_mode = 2
+text = "2.0s"
+
+[node name="GraphicsSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "GRAPHICS"
+
+[node name="WindowModeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Window Mode"
+
+[node name="WindowModeBtn" type="OptionButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/WindowModeRow"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Fullscreen"
+popup/item_1/id = 1
+
+[node name="VSyncRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "VSync"
+
+[node name="VSyncBtn" type="CheckButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/VSyncRow"]
+layout_mode = 2
+text = "On"
+
+[node name="MSAARow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Anti-Aliasing (MSAA)"
+
+[node name="MSAABtn" type="OptionButton" parent="HBoxContainer/RightPanel/MarginContainer/GraphicsSettings/MSAARow"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "2x"
+popup/item_1/id = 1
+popup/item_2/text = "4x"
+popup/item_2/id = 2
+popup/item_3/text = "8x"
+popup/item_3/id = 3
+
+[node name="AudioSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "AUDIO"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Master Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MasterVolumeRow"]
+layout_mode = 2
+text = "100%"
+
+[node name="MusicVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Music Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/MusicVolumeRow"]
+layout_mode = 2
+text = "100%"
+
+[node name="SFXVolumeRow" type="HBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValue" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/AudioSettings/SFXVolumeRow"]
+layout_mode = 2
+text = "100%"
+
+[node name="InputSettings" type="VBoxContainer" parent="HBoxContainer/RightPanel/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_i47rn")
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0.7647059, 0.69411767, 1)
+theme_override_font_sizes/font_size = 36
+text = "CONTROLS"
+
+[node name="MidiTitle" type="Label" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "🎹 MIDI Devices"
+
+[node name="DeviceList" type="ItemList" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="RefreshButton" type="Button" parent="HBoxContainer/RightPanel/MarginContainer/InputSettings"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Refresh Devices"

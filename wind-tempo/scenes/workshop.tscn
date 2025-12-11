@@ -1,0 +1,165 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddp7t63gyb0uk"]
+
+[ext_resource type="Script" uid="uid://bt47ibmgtgxn7" path="res://scenes/workshop.gd" id="1_workshop"]
+[ext_resource type="Script" uid="uid://bkwdts540ijmv" path="res://scenes/piano_roll.gd" id="2_pianoroll"]
+
+[node name="Workshop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_workshop")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.12, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="BackButton" type="Button" parent="VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "← Back"
+
+[node name="Separator1" type="VSeparator" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+text = "Title:"
+
+[node name="TitleEdit" type="LineEdit" parent="VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "Track Title"
+
+[node name="Separator2" type="VSeparator" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+
+[node name="BPMLabel" type="Label" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+text = "BPM:"
+
+[node name="BPMSpinBox" type="SpinBox" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+min_value = 40.0
+max_value = 300.0
+value = 120.0
+
+[node name="Separator3" type="VSeparator" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "▶ Play"
+
+[node name="StopButton" type="Button" parent="VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+disabled = true
+text = "■ Stop"
+
+[node name="Separator4" type="VSeparator" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "💾 Save"
+
+[node name="Spacer" type="Control" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = -200
+
+[node name="PianoRollContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimelineScroll" type="ScrollContainer" parent="VBoxContainer/HSplitContainer/PianoRollContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="PianoRoll" type="Control" parent="VBoxContainer/HSplitContainer/PianoRollContainer/TimelineScroll"]
+custom_minimum_size = Vector2(3000, 1056)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_pianoroll")
+
+[node name="HelpBar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/PianoRollContainer"]
+layout_mode = 2
+
+[node name="HelpLabel" type="Label" parent="VBoxContainer/HSplitContainer/PianoRollContainer/HelpBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.6, 1)
+theme_override_font_sizes/font_size = 12
+text = "Left Click: Add note | Right Click: Delete note | Ctrl+Click: Select multiple | Space: Play/Stop | Ctrl+S: Save"
+
+[node name="SidePanel" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TracksLabel" type="Label" parent="VBoxContainer/HSplitContainer/SidePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "📁 Your Tracks"
+
+[node name="TrackList" type="ItemList" parent="VBoxContainer/HSplitContainer/SidePanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NewTrackButton" type="Button" parent="VBoxContainer/HSplitContainer/SidePanel"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "+ New Track"
+
+[node name="BottomBar" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="NoteCountLabel" type="Label" parent="VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Notes: 0"
+
+[node name="DurationLabel" type="Label" parent="VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Duration: 0.0s"
+
+[node name="Spacer" type="Control" parent="VBoxContainer/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Ready"

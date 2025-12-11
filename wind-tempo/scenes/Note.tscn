@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://bi8iow5w12nps"]
+
+[ext_resource type="Script" uid="uid://clg1nsi4r4lrj" path="res://scripts/note.gd" id="1_ku001"]
+
+[node name="Note" type="Node2D"]
+script = ExtResource("1_ku001")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-12, -20, 12, -20, 12, 20, -12, 20)
+
+[node name="NoteLabel" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+vertical_alignment = 1
