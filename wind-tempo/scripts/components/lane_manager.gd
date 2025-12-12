@@ -85,4 +85,3 @@ func _draw() -> void:
 	if draw_edge_lines:
 		var right_x: float = start_x + float(lane_count) * step_w
 		draw_line(Vector2(right_x, 0), Vector2(right_x, h), lane_line_color, lane_line_width, true)
-

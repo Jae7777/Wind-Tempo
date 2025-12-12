@@ -151,4 +151,3 @@ func _get_lane_label(lane: int) -> String:
 
 func _is_black_key(midi_note: int) -> bool:
 	return (midi_note % 12) in [1, 3, 6, 8, 10]
-

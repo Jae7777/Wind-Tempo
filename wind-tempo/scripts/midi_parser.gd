@@ -285,4 +285,3 @@ static func _read_variable_length(bytes: PackedByteArray, pos: int) -> Array:
 			break
 	
 	return [value, pos]
-

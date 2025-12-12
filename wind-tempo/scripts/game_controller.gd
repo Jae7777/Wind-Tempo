@@ -256,4 +256,3 @@ func _get_lane_label(lane: int) -> String:
 	var idx: int = midi % 12
 	var octave: int = (midi / 12) - 1
 	return "%s%d" % [NOTE_NAMES[idx], octave]
-

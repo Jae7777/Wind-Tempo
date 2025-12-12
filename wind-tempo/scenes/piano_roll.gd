@@ -13,4 +13,3 @@ func _ready() -> void:
 func _draw() -> void:
 	if workshop and workshop.has_method("draw_piano_roll"):
 		workshop.draw_piano_roll(self)
-

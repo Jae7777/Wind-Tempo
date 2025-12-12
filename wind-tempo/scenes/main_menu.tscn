@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://opg0dixgcxcg"]
 
-[ext_resource type="Script" uid="uid://dd547ny3cykls" path="res://scenes/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://dd547ny3cykls" path="res://Scenes/main_menu.gd" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://blpnod6yqv6le" path="res://branding/Wind Tempo Banner Light.png" id="2_bqqt6"]
-[ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://scenes/menu.tres" id="3_bqqt6"]
+[ext_resource type="Theme" uid="uid://b87yqogabfaj8" path="res://Scenes/menu.tres" id="3_bqqt6"]
 
 [sub_resource type="Gradient" id="Gradient_wu84c"]
 colors = PackedColorArray(0.45490196, 0.6901961, 0.5647059, 1, 0.36078432, 0.7019608, 0.62352943, 1)

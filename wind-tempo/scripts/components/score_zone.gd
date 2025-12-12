@@ -34,6 +34,9 @@ var perfect_count: int = 0
 var good_count: int = 0
 var miss_count: int = 0
 
+# Gate scoring / misses after game ends
+var accepting_input: bool = true
+
 func _ready() -> void:
 	queue_redraw()
 
@@ -43,14 +46,27 @@ func set_notes_container(container: Node2D) -> void:
 func get_judge_y() -> float:
 	return global_position.y
 
+# Call this when the game starts/ends
+func set_accepting_input(v: bool) -> void:
+	accepting_input = v
+
+func end_game() -> void:
+	set_accepting_input(false)
+
+func start_game() -> void:
+	set_accepting_input(true)
+
 func evaluate_hit(lane: int) -> Dictionary:
 	"""Evaluate a hit attempt for a specific lane. Returns hit result."""
+	if not accepting_input:
+		return {} # ignore hits after game ends (no miss, no combo reset)
+
 	if notes_container == null:
 		return _create_miss_result(lane)
-	
+
 	var best: Node2D = null
 	var best_dist: float = INF
-	
+
 	for c in notes_container.get_children():
 		if c is Node2D:
 			var note_lane = c.get("lane")
@@ -59,9 +75,9 @@ func evaluate_hit(lane: int) -> Dictionary:
 				if d < best_dist:
 					best_dist = d
 					best = c
-	
+
 	var result: Dictionary
-	
+
 	if best != null:
 		if best_dist <= perfect_window:
 			result = _register_hit("perfect", lane, perfect_points)
@@ -73,16 +89,18 @@ func evaluate_hit(lane: int) -> Dictionary:
 			result = _create_miss_result(lane)
 	else:
 		result = _create_miss_result(lane)
-	
+
 	return result
 
 func check_missed_notes() -> void:
 	"""Check for notes that passed the judge line (auto-miss)"""
+	if not accepting_input:
+		return
 	if notes_container == null:
 		return
-	
+
 	var miss_threshold: float = global_position.y + miss_window
-	
+
 	for child in notes_container.get_children():
 		if child is Node2D:
 			if child.global_position.y > miss_threshold:
@@ -94,16 +112,16 @@ func _register_hit(hit_type: String, lane: int, base_points: int) -> Dictionary:
 	current_combo += 1
 	if current_combo > max_combo:
 		max_combo = current_combo
-	
+
 	if hit_type == "perfect":
 		perfect_count += 1
 	else:
 		good_count += 1
-	
+
 	var multiplier := _get_combo_multiplier()
 	var final_points := int(base_points * multiplier)
 	score += final_points
-	
+
 	var result := {
 		"hit_type": hit_type,
 		"lane": lane,
@@ -111,17 +129,17 @@ func _register_hit(hit_type: String, lane: int, base_points: int) -> Dictionary:
 		"multiplier": multiplier,
 		"label": _get_lane_label(lane)
 	}
-	
+
 	hit_registered.emit(hit_type, lane, final_points, multiplier)
 	combo_updated.emit(current_combo, multiplier)
 	_emit_stats()
-	
+
 	return result
 
 func _register_miss(lane: int) -> void:
 	current_combo = 0
 	miss_count += 1
-	
+
 	miss_registered.emit(lane)
 	combo_updated.emit(0, 1.0)
 	_emit_stats()
@@ -129,7 +147,7 @@ func _register_miss(lane: int) -> void:
 func _create_miss_result(lane: int) -> Dictionary:
 	current_combo = 0
 	miss_count += 1
-	
+
 	var result := {
 		"hit_type": "miss",
 		"lane": lane,
@@ -137,11 +155,11 @@ func _create_miss_result(lane: int) -> Dictionary:
 		"multiplier": 1.0,
 		"label": _get_lane_label(lane)
 	}
-	
+
 	miss_registered.emit(lane)
 	combo_updated.emit(0, 1.0)
 	_emit_stats()
-	
+
 	return result
 
 func _get_combo_multiplier() -> float:
@@ -158,7 +176,7 @@ func get_stats() -> Dictionary:
 	var accuracy := 0.0
 	if total > 0:
 		accuracy = (float(perfect_count) + float(good_count) * 0.5) / float(total) * 100.0
-	
+
 	return {
 		"score": score,
 		"combo": current_combo,
@@ -198,4 +216,3 @@ func _draw() -> void:
 	# Draw judge line
 	var width: float = get_viewport_rect().size.x
 	draw_rect(Rect2(-width/2, -judge_line_height/2, width, judge_line_height), judge_line_color)
-
