@@ -3,7 +3,7 @@ extends Control
 var difficulties = ["Easy", "Normal", "Hard"]
 var current_index = 1 # Default = Normal
 
-const MAIN_MENU_SCENE_PATH = "res://control.tscn"
+const MAIN_MENU_SCENE_PATH = "res://start.tscn"
 
 # FIX: Update the path to your Label. You must ensure this path is correct
 @onready var label = $CenterContainer/PanelContainer/VBoxContainer/Label
