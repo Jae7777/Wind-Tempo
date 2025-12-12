@@ -53,10 +53,15 @@ text = "EASY"
 layout_mode = 2
 text = "NORMAL"
 
+[node name="Hard" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "HARD"
+
 [node name="Return" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Return"
 
 [connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer/Easy" to="." method="_on_easy_pressed"]
 [connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer/Normal" to="." method="_on_normal_pressed"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer/Hard" to="." method="_on_hard_pressed"]
 [connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/Return" to="." method="_on_return_pressed"]
