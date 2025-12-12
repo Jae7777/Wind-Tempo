@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0ny18roiq14t"]
+
+[ext_resource type="Script" uid="uid://cr8a5jileyyye" path="res://Normal.gd" id="1_uiu23"]
+[ext_resource type="Texture2D" uid="uid://bvtec2mrnn1m5" path="res://1054796.jpg" id="2_6h6ne"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uiu23")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -1214.0
+offset_top = -755.0
+offset_right = 1479.0
+offset_bottom = 745.0
+texture = ExtResource("2_6h6ne")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Track1" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Track1"
+
+[node name="Track2" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Track2"
+
+[node name="Track3" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Track3"
+
+[node name="return" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "RETURN"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer2/Track1" to="." method="_on_track_1_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer2/Track2" to="." method="_on_track_2_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer2/Track3" to="." method="_on_track_3_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/return" to="." method="_on_return_pressed"]

@@ -5,6 +5,7 @@ var current_index = 1 # Default = Normal
 
 const MAIN_MENU_SCENE_PATH = "res://start.tscn"
 const EASY_TRACKS_PATH = "res://Easy.tscn"
+const NORMAL_TRACKS_PATH = "res://Normal.tscn"
 
 # FIX: Update the path to your Label. You must ensure this path is correct
 @onready var label = $CenterContainer/PanelContainer/VBoxContainer/Label
@@ -33,6 +34,8 @@ func select_difficulty():
 	match current_index:
 		0: # Easy
 			scene_path = EASY_TRACKS_PATH
+		1: # Normal
+			scene_path = NORMAL_TRACKS_PATH
 	
 	if scene_path != "":
 		if FileAccess.file_exists(scene_path):
@@ -72,4 +75,8 @@ func _on_return_pressed() -> void:
 
 func _on_easy_pressed() -> void:
 	current_index = 0 # Index 0 = "Easy"
+	select_difficulty() # This calls save_settings() and loads tracks
+
+func _on_normal_pressed() -> void:
+	current_index = 1 # Index 1 = "Normal"l
 	select_difficulty() # This calls save_settings() and loads tracks
