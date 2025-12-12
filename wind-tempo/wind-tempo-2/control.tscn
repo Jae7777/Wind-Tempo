@@ -44,8 +44,13 @@ text = "Select Difficulty"
 layout_mode = 2
 alignment = 1
 
+[node name="Easy" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "EASY"
+
 [node name="Return" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Return"
 
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/VBoxContainer/Easy" to="." method="_on_easy_pressed"]
 [connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/Return" to="." method="_on_return_pressed"]

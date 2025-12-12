@@ -4,6 +4,7 @@ var difficulties = ["Easy", "Normal", "Hard"]
 var current_index = 1 # Default = Normal
 
 const MAIN_MENU_SCENE_PATH = "res://start.tscn"
+const EASY_TRACKS_PATH = "res://Easy.tscn"
 
 # FIX: Update the path to your Label. You must ensure this path is correct
 @onready var label = $CenterContainer/PanelContainer/VBoxContainer/Label
@@ -29,6 +30,9 @@ func select_difficulty():
 	
 	# --- SCENE LOADING LOGIC (UPDATED) ---
 	var scene_path = ""
+	match current_index:
+		0: # Easy
+			scene_path = EASY_TRACKS_PATH
 	
 	if scene_path != "":
 		if FileAccess.file_exists(scene_path):
@@ -64,3 +68,8 @@ func _on_return_pressed() -> void:
 		get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
 	else:
 		print("ERROR: Main menu scene not found at: ", MAIN_MENU_SCENE_PATH)
+
+
+func _on_easy_pressed() -> void:
+	current_index = 0 # Index 0 = "Easy"
+	select_difficulty() # This calls save_settings() and loads tracks
