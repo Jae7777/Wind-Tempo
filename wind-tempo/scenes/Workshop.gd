@@ -44,7 +44,6 @@ var _suppress_ui_signals: bool = false
 # UNDO / REDO
 # ============================================================
 const UNDO_LIMIT: int = 200
-
 var _undo_stack: Array[Dictionary] = []
 var _redo_stack: Array[Dictionary] = []
 var _next_note_uid: int = 1
@@ -64,14 +63,14 @@ func _undo() -> void:
 	if _undo_stack.is_empty():
 		return
 	var action: Dictionary = _undo_stack.pop_back() as Dictionary
-	_apply_action(action, true) # undo = true
+	_apply_action(action, true)
 	_redo_stack.append(action)
 
 func _redo() -> void:
 	if _redo_stack.is_empty():
 		return
 	var action: Dictionary = _redo_stack.pop_back() as Dictionary
-	_apply_action(action, false) # undo = false
+	_apply_action(action, false)
 	_undo_stack.append(action)
 
 func _apply_action(action: Dictionary, undo: bool) -> void:
@@ -94,6 +93,11 @@ func _apply_action(action: Dictionary, undo: bool) -> void:
 				_add_notes_from_data(notes)
 			else:
 				_remove_notes_by_uid_or_data(notes)
+
+		"transform_notes":
+			var before: Array = action.get("before", []) as Array
+			var after: Array = action.get("after", []) as Array
+			_set_notes_from_data(before if undo else after)
 
 		"set_title":
 			var old_v: String = str(action.get("old", ""))
@@ -135,7 +139,8 @@ func _ensure_note_uid(note: TrackFormat.TrackNote, desired_uid: int = -1) -> int
 func _find_note_by_uid(uid: int) -> TrackFormat.TrackNote:
 	if uid < 0 or not current_track:
 		return null
-	for n in current_track.notes:
+	for raw in current_track.notes:
+		var n: TrackFormat.TrackNote = raw
 		if n.has_meta("uid") and int(n.get_meta("uid")) == uid:
 			return n
 	return null
@@ -179,17 +184,189 @@ func _remove_notes_by_uid_or_data(notes_data: Array) -> void:
 			current_track.remove_note(n)
 			selected_notes.erase(n)
 
+func _set_notes_from_data(notes_data: Array) -> void:
+	for item in notes_data:
+		var data: Dictionary = item as Dictionary
+		var uid := int(data.get("uid", -1))
+		var n := _find_note_by_uid(uid) if uid >= 0 else null
+		if n == null:
+			n = _find_note_by_data(data)
+		if n != null:
+			_ensure_note_uid(n, uid)
+			n.time = float(data.get("time", 0.0))
+			n.note = int(data.get("midi", MIDI_MIN))
+			n.duration = float(data.get("duration", 0.25))
+
 func _assign_uids_to_all_notes() -> void:
 	if not current_track:
 		return
 	var max_uid := 0
-	for n in current_track.notes:
+	for raw in current_track.notes:
+		var n: TrackFormat.TrackNote = raw
 		if n.has_meta("uid"):
 			max_uid = max(max_uid, int(n.get_meta("uid")))
 		else:
 			var uid := _ensure_note_uid(n)
 			max_uid = max(max_uid, uid)
 	_next_note_uid = max_uid + 1
+
+# ============================================================
+# DRAG MOVE / RESIZE (NEW)
+# ============================================================
+enum DragMode { NONE, MOVE, RESIZE }
+const DRAG_START_DISTANCE: float = 3.0
+const RESIZE_HANDLE_PX: float = 6.0
+
+var _mouse_down_left: bool = false
+var _dragging: bool = false
+var _drag_mode: int = DragMode.NONE
+var _drag_start_pos: Vector2 = Vector2.ZERO
+var _drag_anchor_note: TrackFormat.TrackNote = null
+var _drag_original_notes: Array[Dictionary] = []  # before-data for affected notes
+
+func _get_grid_duration() -> float:
+	if not current_track:
+		return 0.0
+	var beat_duration := 60.0 / float(current_track.settings.bpm)
+	return beat_duration / float(grid_division)
+
+func _is_on_resize_handle(pos: Vector2, note: TrackFormat.TrackNote) -> bool:
+	var note_x := float(note.time) * zoom_x
+	var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
+	var note_w := maxf(float(note.duration) * zoom_x, 10.0)
+	var note_h := zoom_y
+	var right_x := note_x + note_w
+	var on_y := (pos.y >= note_y) and (pos.y <= note_y + note_h)
+	var on_x := absf(pos.x - right_x) <= RESIZE_HANDLE_PX
+	return on_x and on_y
+
+func _start_drag(anchor: TrackFormat.TrackNote, mode: int) -> void:
+	_drag_anchor_note = anchor
+	_drag_mode = mode
+	_dragging = false
+
+	_drag_original_notes.clear()
+
+	if _drag_mode == DragMode.RESIZE:
+		_ensure_note_uid(anchor)
+		_drag_original_notes.append(_note_to_data(anchor))
+	else:
+		# MOVE: affect all selected notes (or just anchor if selection empty)
+		if selected_notes.is_empty():
+			selected_notes = [anchor]
+		for n in selected_notes:
+			_ensure_note_uid(n)
+			_drag_original_notes.append(_note_to_data(n))
+
+func _update_drag(pos: Vector2) -> void:
+	if not current_track or _drag_anchor_note == null:
+		return
+
+	# Start dragging once we move enough
+	if not _dragging:
+		if pos.distance_to(_drag_start_pos) < DRAG_START_DISTANCE:
+			return
+		_dragging = true
+		is_modified = true
+		_update_ui()
+
+	var grid_dur := _get_grid_duration()
+
+	if _drag_mode == DragMode.MOVE:
+		var delta_time := (pos.x - _drag_start_pos.x) / zoom_x
+		if grid_snap and grid_dur > 0.0:
+			delta_time = roundf(delta_time / grid_dur) * grid_dur
+
+		var delta_rows := int(round((pos.y - _drag_start_pos.y) / zoom_y))
+
+		for item in _drag_original_notes:
+			var data: Dictionary = item as Dictionary
+			var uid := int(data.get("uid", -1))
+			var n := _find_note_by_uid(uid)
+			if n == null:
+				continue
+
+			var new_time := float(data.get("time", 0.0)) + delta_time
+			new_time = maxf(0.0, new_time)
+
+			var new_midi := int(data.get("midi", MIDI_MIN)) - delta_rows
+			new_midi = clamp(new_midi, MIDI_MIN, MIDI_MAX)
+
+			n.time = new_time
+			n.note = new_midi
+
+	elif _drag_mode == DragMode.RESIZE:
+		# Resize only the anchor note (stored as the only entry in _drag_original_notes)
+		if _drag_original_notes.is_empty():
+			return
+		var data0: Dictionary = _drag_original_notes[0] as Dictionary
+		var uid0 := int(data0.get("uid", -1))
+		var n0 := _find_note_by_uid(uid0)
+		if n0 == null:
+			return
+
+		var base_dur := float(data0.get("duration", 0.25))
+		var delta_dur := (pos.x - _drag_start_pos.x) / zoom_x
+		var new_dur := base_dur + delta_dur
+
+		if grid_snap and grid_dur > 0.0:
+			new_dur = roundf(new_dur / grid_dur) * grid_dur
+			new_dur = maxf(grid_dur, new_dur)
+		else:
+			new_dur = maxf(0.05, new_dur)
+
+		n0.duration = new_dur
+
+	if piano_roll:
+		piano_roll.queue_redraw()
+
+func _notes_data_equal(a: Array, b: Array) -> bool:
+	if a.size() != b.size():
+		return false
+	for i in range(a.size()):
+		var da: Dictionary = a[i] as Dictionary
+		var db: Dictionary = b[i] as Dictionary
+		if int(da.get("uid", -1)) != int(db.get("uid", -1)):
+			return false
+		if absf(float(da.get("time", 0.0)) - float(db.get("time", 0.0))) > 0.0005:
+			return false
+		if int(da.get("midi", 0)) != int(db.get("midi", 0)):
+			return false
+		if absf(float(da.get("duration", 0.0)) - float(db.get("duration", 0.0))) > 0.0005:
+			return false
+	return true
+
+func _finish_drag() -> void:
+	if not current_track or _drag_anchor_note == null:
+		return
+	if not _dragging:
+		return
+
+	var after: Array[Dictionary] = []
+	for item in _drag_original_notes:
+		var before_d: Dictionary = item as Dictionary
+		var uid := int(before_d.get("uid", -1))
+		var n := _find_note_by_uid(uid)
+		if n != null:
+			after.append(_note_to_data(n))
+
+	if not _notes_data_equal(_drag_original_notes, after):
+		_push_action({
+			"type": "transform_notes",
+			"before": _drag_original_notes.duplicate(true),
+			"after": after
+		})
+
+	_update_ui()
+	if piano_roll:
+		piano_roll.queue_redraw()
+
+func _reset_drag_state() -> void:
+	_mouse_down_left = false
+	_dragging = false
+	_drag_mode = DragMode.NONE
+	_drag_anchor_note = null
+	_drag_original_notes.clear()
 
 # ============================================================
 # LIFECYCLE / UI
@@ -234,6 +411,7 @@ func _new_track() -> void:
 	selected_notes.clear()
 	_reset_history()
 	_assign_uids_to_all_notes()
+	_reset_drag_state()
 	_update_ui()
 	if piano_roll:
 		piano_roll.queue_redraw()
@@ -300,7 +478,7 @@ func _stop_playback() -> void:
 	piano_roll.queue_redraw()
 
 # ============================================================
-# INPUT / NOTE EDITING
+# INPUT / NOTE EDITING (click add/select + drag move/resize)
 # ============================================================
 
 func _on_piano_roll_input(event: InputEvent) -> void:
@@ -308,31 +486,55 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseButton:
-		var mouse_event := event as InputEventMouseButton
-		var pos := mouse_event.position
+		var mb: InputEventMouseButton = event as InputEventMouseButton
+		var pos := mb.position
 
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
-			var time := pos.x / zoom_x
-			var midi_note := MIDI_MAX - int(pos.y / zoom_y)
+		if mb.button_index == MOUSE_BUTTON_LEFT:
+			if mb.pressed:
+				_mouse_down_left = true
+				_drag_start_pos = pos
+				_dragging = false
 
-			if grid_snap:
-				var beat_duration := 60.0 / current_track.settings.bpm
-				var grid_duration := beat_duration / grid_division
-				time = roundf(time / grid_duration) * grid_duration
+				var clicked_note := _get_note_at_position(pos)
 
-			var clicked_note := _get_note_at_position(pos)
-			if clicked_note:
-				if Input.is_key_pressed(KEY_CTRL):
-					if clicked_note in selected_notes:
-						selected_notes.erase(clicked_note)
+				# Click on note: select + prep drag
+				if clicked_note != null:
+					# Selection rules
+					if mb.ctrl_pressed:
+						if clicked_note in selected_notes:
+							selected_notes.erase(clicked_note)
+							_reset_drag_state()
+							if piano_roll:
+								piano_roll.queue_redraw()
+							return
+						else:
+							selected_notes.append(clicked_note)
 					else:
-						selected_notes.append(clicked_note)
-				else:
-					selected_notes = [clicked_note]
-			else:
+						if not (clicked_note in selected_notes):
+							selected_notes = [clicked_note]
+
+					var mode := DragMode.MOVE
+					if _is_on_resize_handle(pos, clicked_note):
+						mode = DragMode.RESIZE
+					_start_drag(clicked_note, mode)
+
+					if piano_roll:
+						piano_roll.queue_redraw()
+					return
+
+				# Click empty: add note (undoable)
+				var time := pos.x / zoom_x
+				var midi_note := MIDI_MAX - int(pos.y / zoom_y)
+
+				if grid_snap:
+					var grid_dur := _get_grid_duration()
+					if grid_dur > 0.0:
+						time = roundf(time / grid_dur) * grid_dur
+
 				if midi_note >= MIDI_MIN and midi_note <= MIDI_MAX:
-					var beat_duration := 60.0 / current_track.settings.bpm
-					var dur := beat_duration / grid_division
+					var dur := _get_grid_duration()
+					if dur <= 0.0:
+						dur = 0.25
 
 					current_track.add_note(time, midi_note, dur)
 
@@ -350,30 +552,46 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 						})
 
 					is_modified = true
+					selected_notes.clear()
 					_update_ui()
+					if piano_roll:
+						piano_roll.queue_redraw()
 
-			piano_roll.queue_redraw()
+			else:
+				# release left
+				if _mouse_down_left:
+					_finish_drag()
+				_reset_drag_state()
 
-		elif mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
-			var clicked_note := _get_note_at_position(pos)
-			if clicked_note:
-				_ensure_note_uid(clicked_note)
-				var data := _note_to_data(clicked_note)
-				current_track.remove_note(clicked_note)
-				selected_notes.erase(clicked_note)
+		elif mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
+			# right click delete (undoable)
+			var clicked_note2 := _get_note_at_position(pos)
+			if clicked_note2:
+				_ensure_note_uid(clicked_note2)
+				var data := _note_to_data(clicked_note2)
+				current_track.remove_note(clicked_note2)
+				selected_notes.erase(clicked_note2)
 				_push_action({"type": "remove_notes", "notes": [data]})
 				is_modified = true
 				_update_ui()
-				piano_roll.queue_redraw()
+				if piano_roll:
+					piano_roll.queue_redraw()
+
+	elif event is InputEventMouseMotion:
+		var mm: InputEventMouseMotion = event as InputEventMouseMotion
+		if _mouse_down_left and _drag_anchor_note != null:
+			_update_drag(mm.position)
 
 func _get_note_at_position(pos: Vector2) -> TrackFormat.TrackNote:
 	if not current_track:
 		return null
 
-	for note in current_track.notes:
-		var note_x := note.time * zoom_x
-		var note_y := (MIDI_MAX - note.note) * zoom_y
-		var note_w := maxf(note.duration * zoom_x, 10.0)
+	# Prefer top-most / last-added if overlapping: iterate from end
+	for i in range(current_track.notes.size() - 1, -1, -1):
+		var note: TrackFormat.TrackNote = current_track.notes[i]
+		var note_x := float(note.time) * zoom_x
+		var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
+		var note_w := maxf(float(note.duration) * zoom_x, 10.0)
 		var note_h := zoom_y
 
 		if pos.x >= note_x and pos.x <= note_x + note_w and pos.y >= note_y and pos.y <= note_y + note_h:
@@ -431,8 +649,10 @@ func _load_track(path: String) -> void:
 		is_modified = false
 		_reset_history()
 		_assign_uids_to_all_notes()
+		_reset_drag_state()
 		_update_ui()
-		piano_roll.queue_redraw()
+		if piano_roll:
+			piano_roll.queue_redraw()
 
 # ============================================================
 # KEYBOARD SHORTCUTS
@@ -472,22 +692,23 @@ func _delete_selected_notes() -> void:
 		return
 
 	var removed: Array = []
-	for note in selected_notes:
-		_ensure_note_uid(note)
-		removed.append(_note_to_data(note))
+	for n in selected_notes:
+		_ensure_note_uid(n)
+		removed.append(_note_to_data(n))
 
-	for data_item in removed:
-		var data: Dictionary = data_item as Dictionary
-		var n := _find_note_by_uid(int(data["uid"]))
-		if n != null:
-			current_track.remove_note(n)
+	for item in removed:
+		var data: Dictionary = item as Dictionary
+		var n2 := _find_note_by_uid(int(data.get("uid", -1)))
+		if n2 != null:
+			current_track.remove_note(n2)
 
 	selected_notes.clear()
 	_push_action({"type": "remove_notes", "notes": removed})
 
 	is_modified = true
 	_update_ui()
-	piano_roll.queue_redraw()
+	if piano_roll:
+		piano_roll.queue_redraw()
 
 func _on_back_pressed() -> void:
 	if is_modified:
@@ -520,34 +741,43 @@ func draw_piano_roll(canvas: CanvasItem) -> void:
 		canvas.draw_rect(Rect2(0, y, size.x, zoom_y), key_color, true)
 		canvas.draw_line(Vector2(0, y), Vector2(size.x, y), grid_color, 1.0)
 
-	var beat_duration := 60.0 / current_track.settings.bpm
+	var beat_duration := 60.0 / float(current_track.settings.bpm)
 	var visible_duration := size.x / zoom_x
 	var beat := 0
 	var time := 0.0
 
 	while time < visible_duration:
 		var x := time * zoom_x
-		var is_measure := (beat % current_track.settings.time_signature[0]) == 0
+		var is_measure := (beat % int(current_track.settings.time_signature[0])) == 0
 		var line_color := beat_color if is_measure else grid_color
 		var line_width := 2.0 if is_measure else 1.0
 		canvas.draw_line(Vector2(x, 0), Vector2(x, size.y), line_color, line_width)
 		beat += 1
 		time = beat * beat_duration
 
-	for note in current_track.notes:
-		var note_x := note.time * zoom_x
-		var note_y := (MIDI_MAX - note.note) * zoom_y
-		var note_w := maxf(note.duration * zoom_x, 8.0)
-		var note_h := zoom_y - 2
+	for raw in current_track.notes:
+		var note: TrackFormat.TrackNote = raw
+		var note_x := float(note.time) * zoom_x
+		var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
+		var note_w := maxf(float(note.duration) * zoom_x, 8.0)
+		var note_h := zoom_y - 2.0
 
 		var is_selected := note in selected_notes
-		var hue := float(note.note - MIDI_MIN) / float(KEY_COUNT) * 0.8
+		var hue := float(int(note.note) - MIDI_MIN) / float(KEY_COUNT) * 0.8
 		var note_color := Color.from_hsv(hue, 0.7, 0.9)
 		if is_selected:
 			note_color = Color(1.0, 1.0, 0.5)
 
-		canvas.draw_rect(Rect2(note_x, note_y + 1, note_w, note_h), note_color, true)
-		canvas.draw_rect(Rect2(note_x, note_y + 1, note_w, note_h), note_color.darkened(0.3), false, 1.0)
+		canvas.draw_rect(Rect2(note_x, note_y + 1.0, note_w, note_h), note_color, true)
+		canvas.draw_rect(Rect2(note_x, note_y + 1.0, note_w, note_h), note_color.darkened(0.3), false, 1.0)
+
+		# Resize handle hint (small line at the end)
+		canvas.draw_line(
+			Vector2(note_x + note_w, note_y + 1.0),
+			Vector2(note_x + note_w, note_y + 1.0 + note_h),
+			note_color.darkened(0.5),
+			1.0
+		)
 
 	if is_playing:
 		var cursor_x := playback_time * zoom_x
