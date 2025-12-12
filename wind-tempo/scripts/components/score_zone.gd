@@ -1,5 +1,4 @@
 # scripts/components/score_zone.gd
-# Handles hit detection, scoring, and combo tracking at the judge line
 class_name ScoreZone
 extends Node2D
 
@@ -26,7 +25,7 @@ const NOTE_NAMES: Array[String] = ["C","C#","D","D#","E","F","F#","G","G#","A","
 # References
 var notes_container: Node2D = null
 
-# State
+# State (scoring)
 var score: int = 0
 var current_combo: int = 0
 var max_combo: int = 0
@@ -34,8 +33,15 @@ var perfect_count: int = 0
 var good_count: int = 0
 var miss_count: int = 0
 
-# Gate scoring / misses after game ends
-var accepting_input: bool = true
+# ============================================================
+# GAME STATE (separate from scoring)
+# ============================================================
+enum GameState { IDLE, PLAYING, ENDED }
+var game_state: int = GameState.IDLE
+
+# Independent gates:
+var accept_hits: bool = false
+var accept_misses: bool = false
 
 func _ready() -> void:
 	queue_redraw()
@@ -46,23 +52,38 @@ func set_notes_container(container: Node2D) -> void:
 func get_judge_y() -> float:
 	return global_position.y
 
-# Call this when the game starts/ends
-func set_accepting_input(v: bool) -> void:
-	accepting_input = v
+# Call these from your game flow
+func start_game() -> void:
+	game_state = GameState.PLAYING
+	accept_hits = true
+	accept_misses = true
 
 func end_game() -> void:
-	set_accepting_input(false)
+	game_state = GameState.ENDED
+	# stop affecting score/combo after the song ends
+	accept_hits = false
+	accept_misses = false
 
-func start_game() -> void:
-	set_accepting_input(true)
+func pause_game() -> void:
+	# optional convenience
+	accept_hits = false
+	accept_misses = false
 
+func resume_game() -> void:
+	if game_state == GameState.PLAYING:
+		accept_hits = true
+		accept_misses = true
+
+# ============================================================
+# HIT / MISS EVALUATION
+# ============================================================
 func evaluate_hit(lane: int) -> Dictionary:
-	"""Evaluate a hit attempt for a specific lane. Returns hit result."""
-	if not accepting_input:
-		return {} # ignore hits after game ends (no miss, no combo reset)
+	# Ignore inputs if we aren't accepting hits (ex: after end)
+	if not accept_hits:
+		return {}
 
 	if notes_container == null:
-		return _create_miss_result(lane)
+		return _create_miss_result(lane) # up to you: can also return {} to ignore
 
 	var best: Node2D = null
 	var best_dist: float = INF
@@ -71,30 +92,28 @@ func evaluate_hit(lane: int) -> Dictionary:
 		if c is Node2D:
 			var note_lane = c.get("lane")
 			if note_lane != null and int(note_lane) == lane:
-				var d: float = abs(c.global_position.y - global_position.y)
+				var d: float = absf(c.global_position.y - global_position.y)
 				if d < best_dist:
 					best_dist = d
 					best = c
 
-	var result: Dictionary
-
 	if best != null:
 		if best_dist <= perfect_window:
-			result = _register_hit("perfect", lane, perfect_points)
+			var r = _register_hit("perfect", lane, perfect_points)
 			best.queue_free()
+			return r
 		elif best_dist <= good_window:
-			result = _register_hit("good", lane, good_points)
+			var r = _register_hit("good", lane, good_points)
 			best.queue_free()
+			return r
 		else:
-			result = _create_miss_result(lane)
-	else:
-		result = _create_miss_result(lane)
+			return _create_miss_result(lane)
 
-	return result
+	return _create_miss_result(lane)
 
 func check_missed_notes() -> void:
-	"""Check for notes that passed the judge line (auto-miss)"""
-	if not accepting_input:
+	# Stop auto-misses when not accepting misses (ex: ended/paused)
+	if not accept_misses:
 		return
 	if notes_container == null:
 		return
@@ -102,24 +121,25 @@ func check_missed_notes() -> void:
 	var miss_threshold: float = global_position.y + miss_window
 
 	for child in notes_container.get_children():
-		if child is Node2D:
-			if child.global_position.y > miss_threshold:
-				var lane: int = child.get("lane") if child.get("lane") != null else 0
-				_register_miss(lane)
-				child.queue_free()
+		if child is Node2D and child.global_position.y > miss_threshold:
+			var lane: int = child.get("lane") if child.get("lane") != null else 0
+			_register_miss(lane)
+			child.queue_free()
 
+# ============================================================
+# SCORING
+# ============================================================
 func _register_hit(hit_type: String, lane: int, base_points: int) -> Dictionary:
 	current_combo += 1
-	if current_combo > max_combo:
-		max_combo = current_combo
+	max_combo = max(max_combo, current_combo)
 
 	if hit_type == "perfect":
 		perfect_count += 1
 	else:
 		good_count += 1
 
-	var multiplier := _get_combo_multiplier()
-	var final_points := int(base_points * multiplier)
+	var multiplier: float = _get_combo_multiplier()
+	var final_points: int = int(round(base_points * multiplier))
 	score += final_points
 
 	var result := {
@@ -133,7 +153,6 @@ func _register_hit(hit_type: String, lane: int, base_points: int) -> Dictionary:
 	hit_registered.emit(hit_type, lane, final_points, multiplier)
 	combo_updated.emit(current_combo, multiplier)
 	_emit_stats()
-
 	return result
 
 func _register_miss(lane: int) -> void:
@@ -145,6 +164,7 @@ func _register_miss(lane: int) -> void:
 	_emit_stats()
 
 func _create_miss_result(lane: int) -> Dictionary:
+	# If you want “miss on press” disabled after end, accept_hits already blocks it.
 	current_combo = 0
 	miss_count += 1
 
@@ -159,14 +179,17 @@ func _create_miss_result(lane: int) -> Dictionary:
 	miss_registered.emit(lane)
 	combo_updated.emit(0, 1.0)
 	_emit_stats()
-
 	return result
 
+# FIXED combo multiplier math
 func _get_combo_multiplier() -> float:
 	if current_combo < combo_multiplier_threshold:
 		return 1.0
-	var extra := current_combo - combo_multiplier_threshold
-	return minf(1.0 + float(extra / combo_multiplier_increment), max_combo_multiplier)
+
+	var extra: int = current_combo - combo_multiplier_threshold
+	# use float division (NOT integer division)
+	var steps: float = float(extra) / float(combo_multiplier_increment)
+	return minf(1.0 + steps, max_combo_multiplier)
 
 func _emit_stats() -> void:
 	stats_updated.emit(get_stats())
@@ -213,6 +236,5 @@ func _get_lane_label(lane: int) -> String:
 	return "%s%d" % [NOTE_NAMES[idx], octave]
 
 func _draw() -> void:
-	# Draw judge line
 	var width: float = get_viewport_rect().size.x
 	draw_rect(Rect2(-width/2, -judge_line_height/2, width, judge_line_height), judge_line_color)
