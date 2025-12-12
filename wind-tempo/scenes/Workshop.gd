@@ -23,11 +23,16 @@ var is_modified: bool = false
 var is_playing: bool = false
 var playback_time: float = 0.0
 
-# Editor settings
+# ============================================================
+# EDITOR SETTINGS
+# ============================================================
 var grid_snap: bool = true
-var grid_division: int = 4  # Notes per beat
-var zoom_x: float = 100.0   # Pixels per second
-var zoom_y: float = 12.0    # Pixels per key
+var grid_division: int = 4               # subdivisions per beat
+var zoom_x: float = 100.0                # pixels per second
+var zoom_y: float = 12.0                 # pixels per key
+
+const GRID_OPTIONS: Array[int] = [1, 2, 3, 4, 6, 8, 12, 16]
+var _grid_option_index: int = 3          # default -> 4
 
 # Selection
 var selected_notes: Array[TrackFormat.TrackNote] = []
@@ -88,11 +93,11 @@ func _apply_action(action: Dictionary, undo: bool) -> void:
 				_add_notes_from_data(notes)
 
 		"remove_notes":
-			var notes: Array = action.get("notes", []) as Array
+			var notes2: Array = action.get("notes", []) as Array
 			if undo:
-				_add_notes_from_data(notes)
+				_add_notes_from_data(notes2)
 			else:
-				_remove_notes_by_uid_or_data(notes)
+				_remove_notes_by_uid_or_data(notes2)
 
 		"transform_notes":
 			var before: Array = action.get("before", []) as Array
@@ -118,7 +123,7 @@ func _apply_action(action: Dictionary, undo: bool) -> void:
 		piano_roll.queue_redraw()
 
 func _note_to_data(note: TrackFormat.TrackNote) -> Dictionary:
-	var uid := -1
+	var uid: int = -1
 	if note.has_meta("uid"):
 		uid = int(note.get_meta("uid"))
 	return {
@@ -129,7 +134,7 @@ func _note_to_data(note: TrackFormat.TrackNote) -> Dictionary:
 	}
 
 func _ensure_note_uid(note: TrackFormat.TrackNote, desired_uid: int = -1) -> int:
-	var uid := desired_uid
+	var uid: int = desired_uid
 	if uid < 0:
 		uid = _next_note_uid
 		_next_note_uid += 1
@@ -149,9 +154,9 @@ func _find_note_by_data(data: Dictionary) -> TrackFormat.TrackNote:
 	if not current_track:
 		return null
 
-	var t := float(data.get("time", 0.0))
-	var m := int(data.get("midi", 0))
-	var d := float(data.get("duration", 0.0))
+	var t: float = float(data.get("time", 0.0))
+	var m: int = int(data.get("midi", 0))
+	var d: float = float(data.get("duration", 0.0))
 
 	for i in range(current_track.notes.size() - 1, -1, -1):
 		var n: TrackFormat.TrackNote = current_track.notes[i]
@@ -162,22 +167,22 @@ func _find_note_by_data(data: Dictionary) -> TrackFormat.TrackNote:
 func _add_notes_from_data(notes_data: Array) -> void:
 	for item in notes_data:
 		var data: Dictionary = item as Dictionary
-		var time := float(data.get("time", 0.0))
-		var midi := int(data.get("midi", MIDI_MIN))
-		var dur  := float(data.get("duration", 0.25))
-		var uid  := int(data.get("uid", -1))
+		var time: float = float(data.get("time", 0.0))
+		var midi: int = int(data.get("midi", MIDI_MIN))
+		var dur: float = float(data.get("duration", 0.25))
+		var uid: int = int(data.get("uid", -1))
 
 		current_track.add_note(time, midi, dur)
 
-		var created := _find_note_by_data({"time": time, "midi": midi, "duration": dur})
+		var created: TrackFormat.TrackNote = _find_note_by_data({"time": time, "midi": midi, "duration": dur})
 		if created:
 			_ensure_note_uid(created, uid)
 
 func _remove_notes_by_uid_or_data(notes_data: Array) -> void:
 	for item in notes_data:
 		var data: Dictionary = item as Dictionary
-		var uid := int(data.get("uid", -1))
-		var n := _find_note_by_uid(uid) if uid >= 0 else null
+		var uid: int = int(data.get("uid", -1))
+		var n: TrackFormat.TrackNote = _find_note_by_uid(uid) if uid >= 0 else null
 		if n == null:
 			n = _find_note_by_data(data)
 		if n != null:
@@ -187,8 +192,8 @@ func _remove_notes_by_uid_or_data(notes_data: Array) -> void:
 func _set_notes_from_data(notes_data: Array) -> void:
 	for item in notes_data:
 		var data: Dictionary = item as Dictionary
-		var uid := int(data.get("uid", -1))
-		var n := _find_note_by_uid(uid) if uid >= 0 else null
+		var uid: int = int(data.get("uid", -1))
+		var n: TrackFormat.TrackNote = _find_note_by_uid(uid) if uid >= 0 else null
 		if n == null:
 			n = _find_note_by_data(data)
 		if n != null:
@@ -200,18 +205,90 @@ func _set_notes_from_data(notes_data: Array) -> void:
 func _assign_uids_to_all_notes() -> void:
 	if not current_track:
 		return
-	var max_uid := 0
+	var max_uid: int = 0
 	for raw in current_track.notes:
 		var n: TrackFormat.TrackNote = raw
 		if n.has_meta("uid"):
 			max_uid = max(max_uid, int(n.get_meta("uid")))
 		else:
-			var uid := _ensure_note_uid(n)
-			max_uid = max(max_uid, uid)
+			var new_uid: int = _ensure_note_uid(n)
+			max_uid = max(max_uid, new_uid)
 	_next_note_uid = max_uid + 1
 
 # ============================================================
-# DRAG MOVE / RESIZE (NEW)
+# MUSICAL GRID + SNAPPING
+# ============================================================
+func _get_time_signature() -> Dictionary:
+	var beats_per_measure: int = 4
+	var denom: int = 4
+
+	if current_track != null and current_track.settings != null and ("time_signature" in current_track.settings):
+		var ts: Variant = current_track.settings.time_signature
+
+		if ts is Array:
+			var a: Array = ts as Array
+			if a.size() >= 2:
+				beats_per_measure = int(a[0])
+				denom = int(a[1])
+		elif ts is PackedInt32Array:
+			var p: PackedInt32Array = ts as PackedInt32Array
+			if p.size() >= 2:
+				beats_per_measure = int(p[0])
+				denom = int(p[1])
+
+	beats_per_measure = max(1, beats_per_measure)
+	denom = max(1, denom)
+	return {"beats": beats_per_measure, "denom": denom}
+
+func _get_beat_duration() -> float:
+	# BPM is quarter-notes per minute; convert "beat" based on time signature denominator
+	if current_track == null:
+		return 0.5
+	var bpm: float = maxf(1.0, float(current_track.settings.bpm))
+	var ts: Dictionary = _get_time_signature()
+	var denom: int = int(ts["denom"])
+	var quarter_duration: float = 60.0 / bpm
+	return quarter_duration * (4.0 / float(denom))
+
+func _get_grid_duration() -> float:
+	var beat_d: float = _get_beat_duration()
+	var div: int = max(1, grid_division)
+	return beat_d / float(div)
+
+func _snap_time(t: float) -> float:
+	if not grid_snap or Input.is_key_pressed(KEY_SHIFT):
+		return t
+	var g: float = _get_grid_duration()
+	if g <= 0.0:
+		return t
+	return roundf(t / g) * g
+
+func _snap_duration(d: float) -> float:
+	if Input.is_key_pressed(KEY_SHIFT):
+		return maxf(0.05, d)
+	if not grid_snap:
+		return maxf(0.05, d)
+	var g: float = _get_grid_duration()
+	if g <= 0.0:
+		return maxf(0.05, d)
+	return maxf(g, roundf(d / g) * g)
+
+func _step_grid_division(dir: int) -> void:
+	_grid_option_index = clamp(_grid_option_index + dir, 0, GRID_OPTIONS.size() - 1)
+	grid_division = GRID_OPTIONS[_grid_option_index]
+	if piano_roll:
+		piano_roll.queue_redraw()
+
+func _sync_grid_index_from_division() -> void:
+	var idx: int = GRID_OPTIONS.find(grid_division)
+	if idx == -1:
+		_grid_option_index = 3
+		grid_division = GRID_OPTIONS[_grid_option_index]
+	else:
+		_grid_option_index = idx
+
+# ============================================================
+# DRAG MOVE / RESIZE
 # ============================================================
 enum DragMode { NONE, MOVE, RESIZE }
 const DRAG_START_DISTANCE: float = 3.0
@@ -224,34 +301,26 @@ var _drag_start_pos: Vector2 = Vector2.ZERO
 var _drag_anchor_note: TrackFormat.TrackNote = null
 var _drag_original_notes: Array[Dictionary] = []  # before-data for affected notes
 
-func _get_grid_duration() -> float:
-	if not current_track:
-		return 0.0
-	var beat_duration := 60.0 / float(current_track.settings.bpm)
-	return beat_duration / float(grid_division)
-
 func _is_on_resize_handle(pos: Vector2, note: TrackFormat.TrackNote) -> bool:
-	var note_x := float(note.time) * zoom_x
-	var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
-	var note_w := maxf(float(note.duration) * zoom_x, 10.0)
-	var note_h := zoom_y
-	var right_x := note_x + note_w
-	var on_y := (pos.y >= note_y) and (pos.y <= note_y + note_h)
-	var on_x := absf(pos.x - right_x) <= RESIZE_HANDLE_PX
+	var note_x: float = float(note.time) * zoom_x
+	var note_y: float = float(MIDI_MAX - int(note.note)) * zoom_y
+	var note_w: float = maxf(float(note.duration) * zoom_x, 10.0)
+	var note_h: float = zoom_y
+	var right_x: float = note_x + note_w
+	var on_y: bool = (pos.y >= note_y) and (pos.y <= note_y + note_h)
+	var on_x: bool = absf(pos.x - right_x) <= RESIZE_HANDLE_PX
 	return on_x and on_y
 
 func _start_drag(anchor: TrackFormat.TrackNote, mode: int) -> void:
 	_drag_anchor_note = anchor
 	_drag_mode = mode
 	_dragging = false
-
 	_drag_original_notes.clear()
 
 	if _drag_mode == DragMode.RESIZE:
 		_ensure_note_uid(anchor)
 		_drag_original_notes.append(_note_to_data(anchor))
 	else:
-		# MOVE: affect all selected notes (or just anchor if selection empty)
 		if selected_notes.is_empty():
 			selected_notes = [anchor]
 		for n in selected_notes:
@@ -259,10 +328,9 @@ func _start_drag(anchor: TrackFormat.TrackNote, mode: int) -> void:
 			_drag_original_notes.append(_note_to_data(n))
 
 func _update_drag(pos: Vector2) -> void:
-	if not current_track or _drag_anchor_note == null:
+	if current_track == null or _drag_anchor_note == null:
 		return
 
-	# Start dragging once we move enough
 	if not _dragging:
 		if pos.distance_to(_drag_start_pos) < DRAG_START_DISTANCE:
 			return
@@ -270,51 +338,43 @@ func _update_drag(pos: Vector2) -> void:
 		is_modified = true
 		_update_ui()
 
-	var grid_dur := _get_grid_duration()
-
 	if _drag_mode == DragMode.MOVE:
-		var delta_time := (pos.x - _drag_start_pos.x) / zoom_x
-		if grid_snap and grid_dur > 0.0:
-			delta_time = roundf(delta_time / grid_dur) * grid_dur
+		var delta_time: float = (pos.x - _drag_start_pos.x) / zoom_x
+		if grid_snap and not Input.is_key_pressed(KEY_SHIFT):
+			var g: float = _get_grid_duration()
+			if g > 0.0:
+				delta_time = roundf(delta_time / g) * g
 
-		var delta_rows := int(round((pos.y - _drag_start_pos.y) / zoom_y))
+		var delta_rows: int = int(round((pos.y - _drag_start_pos.y) / zoom_y))
 
 		for item in _drag_original_notes:
 			var data: Dictionary = item as Dictionary
-			var uid := int(data.get("uid", -1))
-			var n := _find_note_by_uid(uid)
+			var uid: int = int(data.get("uid", -1))
+			var n: TrackFormat.TrackNote = _find_note_by_uid(uid)
 			if n == null:
 				continue
 
-			var new_time := float(data.get("time", 0.0)) + delta_time
-			new_time = maxf(0.0, new_time)
+			var new_time: float = maxf(0.0, float(data.get("time", 0.0)) + delta_time)
+			new_time = _snap_time(new_time)
 
-			var new_midi := int(data.get("midi", MIDI_MIN)) - delta_rows
+			var new_midi: int = int(data.get("midi", MIDI_MIN)) - delta_rows
 			new_midi = clamp(new_midi, MIDI_MIN, MIDI_MAX)
 
 			n.time = new_time
 			n.note = new_midi
 
 	elif _drag_mode == DragMode.RESIZE:
-		# Resize only the anchor note (stored as the only entry in _drag_original_notes)
 		if _drag_original_notes.is_empty():
 			return
 		var data0: Dictionary = _drag_original_notes[0] as Dictionary
-		var uid0 := int(data0.get("uid", -1))
-		var n0 := _find_note_by_uid(uid0)
+		var uid0: int = int(data0.get("uid", -1))
+		var n0: TrackFormat.TrackNote = _find_note_by_uid(uid0)
 		if n0 == null:
 			return
 
-		var base_dur := float(data0.get("duration", 0.25))
-		var delta_dur := (pos.x - _drag_start_pos.x) / zoom_x
-		var new_dur := base_dur + delta_dur
-
-		if grid_snap and grid_dur > 0.0:
-			new_dur = roundf(new_dur / grid_dur) * grid_dur
-			new_dur = maxf(grid_dur, new_dur)
-		else:
-			new_dur = maxf(0.05, new_dur)
-
+		var base_dur: float = float(data0.get("duration", 0.25))
+		var delta_dur: float = (pos.x - _drag_start_pos.x) / zoom_x
+		var new_dur: float = _snap_duration(base_dur + delta_dur)
 		n0.duration = new_dur
 
 	if piano_roll:
@@ -337,7 +397,7 @@ func _notes_data_equal(a: Array, b: Array) -> bool:
 	return true
 
 func _finish_drag() -> void:
-	if not current_track or _drag_anchor_note == null:
+	if current_track == null or _drag_anchor_note == null:
 		return
 	if not _dragging:
 		return
@@ -345,8 +405,8 @@ func _finish_drag() -> void:
 	var after: Array[Dictionary] = []
 	for item in _drag_original_notes:
 		var before_d: Dictionary = item as Dictionary
-		var uid := int(before_d.get("uid", -1))
-		var n := _find_note_by_uid(uid)
+		var uid: int = int(before_d.get("uid", -1))
+		var n: TrackFormat.TrackNote = _find_note_by_uid(uid)
 		if n != null:
 			after.append(_note_to_data(n))
 
@@ -371,7 +431,6 @@ func _reset_drag_state() -> void:
 # ============================================================
 # LIFECYCLE / UI
 # ============================================================
-
 func _ready() -> void:
 	_new_track()
 
@@ -394,7 +453,7 @@ func _on_track_selected(index: int) -> void:
 	if index == 0:
 		_new_track()
 	else:
-		var tracks := _scan_for_tracks()
+		var tracks: Array[Dictionary] = _scan_for_tracks()
 		if index - 1 < tracks.size():
 			_load_track(tracks[index - 1]["path"])
 
@@ -412,6 +471,7 @@ func _new_track() -> void:
 	_reset_history()
 	_assign_uids_to_all_notes()
 	_reset_drag_state()
+	_sync_grid_index_from_division()
 	_update_ui()
 	if piano_roll:
 		piano_roll.queue_redraw()
@@ -425,7 +485,7 @@ func _update_ui() -> void:
 		note_count_label.text = "Notes: %d" % current_track.get_note_count()
 		duration_label.text = "Duration: %.1fs" % current_track.get_duration()
 
-	var modified_text := " *" if is_modified else ""
+	var modified_text: String = " *" if is_modified else ""
 	status_label.text = "Ready" + modified_text
 
 	_suppress_ui_signals = false
@@ -434,7 +494,7 @@ func _on_title_changed(new_text: String) -> void:
 	if _suppress_ui_signals:
 		return
 	if current_track:
-		var old_text := current_track.metadata.title
+		var old_text: String = current_track.metadata.title
 		if new_text == old_text:
 			return
 		current_track.metadata.title = new_text
@@ -446,14 +506,16 @@ func _on_bpm_changed(value: float) -> void:
 	if _suppress_ui_signals:
 		return
 	if current_track:
-		var old_bpm := float(current_track.settings.bpm)
-		var new_bpm := float(value)
+		var old_bpm: float = float(current_track.settings.bpm)
+		var new_bpm: float = float(value)
 		if is_equal_approx(old_bpm, new_bpm):
 			return
 		current_track.settings.bpm = new_bpm
 		_push_action({"type": "set_bpm", "old": old_bpm, "new": new_bpm})
 		is_modified = true
 		_update_ui()
+		if piano_roll:
+			piano_roll.queue_redraw()
 
 func _on_play_pressed() -> void:
 	if current_track and current_track.get_note_count() > 0:
@@ -478,16 +540,15 @@ func _stop_playback() -> void:
 	piano_roll.queue_redraw()
 
 # ============================================================
-# INPUT / NOTE EDITING (click add/select + drag move/resize)
+# INPUT / NOTE EDITING
 # ============================================================
-
 func _on_piano_roll_input(event: InputEvent) -> void:
-	if not current_track:
+	if current_track == null:
 		return
 
 	if event is InputEventMouseButton:
 		var mb: InputEventMouseButton = event as InputEventMouseButton
-		var pos := mb.position
+		var pos: Vector2 = mb.position
 
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			if mb.pressed:
@@ -495,11 +556,10 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 				_drag_start_pos = pos
 				_dragging = false
 
-				var clicked_note := _get_note_at_position(pos)
+				var clicked_note: TrackFormat.TrackNote = _get_note_at_position(pos)
 
 				# Click on note: select + prep drag
 				if clicked_note != null:
-					# Selection rules
 					if mb.ctrl_pressed:
 						if clicked_note in selected_notes:
 							selected_notes.erase(clicked_note)
@@ -513,7 +573,7 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 						if not (clicked_note in selected_notes):
 							selected_notes = [clicked_note]
 
-					var mode := DragMode.MOVE
+					var mode: int = DragMode.MOVE
 					if _is_on_resize_handle(pos, clicked_note):
 						mode = DragMode.RESIZE
 					_start_drag(clicked_note, mode)
@@ -523,24 +583,17 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 					return
 
 				# Click empty: add note (undoable)
-				var time := pos.x / zoom_x
-				var midi_note := MIDI_MAX - int(pos.y / zoom_y)
-
-				if grid_snap:
-					var grid_dur := _get_grid_duration()
-					if grid_dur > 0.0:
-						time = roundf(time / grid_dur) * grid_dur
+				var time: float = _snap_time(pos.x / zoom_x)
+				var midi_note: int = MIDI_MAX - int(pos.y / zoom_y)
 
 				if midi_note >= MIDI_MIN and midi_note <= MIDI_MAX:
-					var dur := _get_grid_duration()
-					if dur <= 0.0:
-						dur = 0.25
+					var dur: float = _snap_duration(_get_grid_duration())
 
 					current_track.add_note(time, midi_note, dur)
 
-					var created := _find_note_by_data({"time": time, "midi": midi_note, "duration": dur})
+					var created: TrackFormat.TrackNote = _find_note_by_data({"time": time, "midi": midi_note, "duration": dur})
 					if created:
-						var uid := _ensure_note_uid(created)
+						var uid: int = _ensure_note_uid(created)
 						_push_action({
 							"type": "add_notes",
 							"notes": [{
@@ -564,11 +617,10 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 				_reset_drag_state()
 
 		elif mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
-			# right click delete (undoable)
-			var clicked_note2 := _get_note_at_position(pos)
+			var clicked_note2: TrackFormat.TrackNote = _get_note_at_position(pos)
 			if clicked_note2:
 				_ensure_note_uid(clicked_note2)
-				var data := _note_to_data(clicked_note2)
+				var data: Dictionary = _note_to_data(clicked_note2)
 				current_track.remove_note(clicked_note2)
 				selected_notes.erase(clicked_note2)
 				_push_action({"type": "remove_notes", "notes": [data]})
@@ -583,16 +635,15 @@ func _on_piano_roll_input(event: InputEvent) -> void:
 			_update_drag(mm.position)
 
 func _get_note_at_position(pos: Vector2) -> TrackFormat.TrackNote:
-	if not current_track:
+	if current_track == null:
 		return null
 
-	# Prefer top-most / last-added if overlapping: iterate from end
 	for i in range(current_track.notes.size() - 1, -1, -1):
 		var note: TrackFormat.TrackNote = current_track.notes[i]
-		var note_x := float(note.time) * zoom_x
-		var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
-		var note_w := maxf(float(note.duration) * zoom_x, 10.0)
-		var note_h := zoom_y
+		var note_x: float = float(note.time) * zoom_x
+		var note_y: float = float(MIDI_MAX - int(note.note)) * zoom_y
+		var note_w: float = maxf(float(note.duration) * zoom_x, 10.0)
+		var note_h: float = zoom_y
 
 		if pos.x >= note_x and pos.x <= note_x + note_w and pos.y >= note_y and pos.y <= note_y + note_h:
 			return note
@@ -602,21 +653,20 @@ func _get_note_at_position(pos: Vector2) -> TrackFormat.TrackNote:
 # ============================================================
 # TRACK LIST / SAVE / LOAD
 # ============================================================
-
 func _refresh_track_list() -> void:
 	track_list.clear()
 	track_list.add_item("+ New Track")
 
-	var tracks := _scan_for_tracks()
+	var tracks: Array[Dictionary] = _scan_for_tracks()
 	for track_info in tracks:
 		track_list.add_item(track_info["name"])
 
 func _scan_for_tracks() -> Array[Dictionary]:
 	var tracks: Array[Dictionary] = []
-	var dir := DirAccess.open("user://tracks/")
+	var dir: DirAccess = DirAccess.open("user://tracks/")
 	if dir:
 		dir.list_dir_begin()
-		var file_name := dir.get_next()
+		var file_name: String = dir.get_next()
 		while file_name != "":
 			if file_name.ends_with(".wtrack"):
 				tracks.append({
@@ -628,11 +678,11 @@ func _scan_for_tracks() -> Array[Dictionary]:
 	return tracks
 
 func _save_track() -> void:
-	if not current_track:
+	if current_track == null:
 		return
 
-	var path := "user://tracks/%s.wtrack" % current_track.metadata.title.to_snake_case()
-	var error := TrackFormat.save_track(current_track, path)
+	var path: String = "user://tracks/%s.wtrack" % current_track.metadata.title.to_snake_case()
+	var error: int = TrackFormat.save_track(current_track, path)
 
 	if error == OK:
 		is_modified = false
@@ -642,7 +692,7 @@ func _save_track() -> void:
 		status_label.text = "Save failed!"
 
 func _load_track(path: String) -> void:
-	var track := TrackFormat.load_track(path)
+	var track: TrackFormat.Track = TrackFormat.load_track(path)
 	if track:
 		current_track = track
 		selected_notes.clear()
@@ -650,6 +700,7 @@ func _load_track(path: String) -> void:
 		_reset_history()
 		_assign_uids_to_all_notes()
 		_reset_drag_state()
+		_sync_grid_index_from_division()
 		_update_ui()
 		if piano_roll:
 			piano_roll.queue_redraw()
@@ -657,26 +708,32 @@ func _load_track(path: String) -> void:
 # ============================================================
 # KEYBOARD SHORTCUTS
 # ============================================================
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		var key_event := event as InputEventKey
+		var key_event: InputEventKey = event as InputEventKey
 
 		if key_event.ctrl_pressed:
 			match key_event.keycode:
-				KEY_S:
-					_save_track()
-				KEY_N:
-					_new_track()
+				KEY_S: _save_track()
+				KEY_N: _new_track()
 				KEY_Z:
 					if key_event.shift_pressed:
 						_redo()
 					else:
 						_undo()
-				KEY_Y:
-					_redo()
+				KEY_Y: _redo()
 				KEY_DELETE, KEY_BACKSPACE:
 					_delete_selected_notes()
+
+		match key_event.keycode:
+			KEY_G:
+				grid_snap = not grid_snap
+				if piano_roll:
+					piano_roll.queue_redraw()
+			KEY_BRACKETLEFT:
+				_step_grid_division(-1)
+			KEY_BRACKETRIGHT:
+				_step_grid_division(1)
 
 		if key_event.keycode == KEY_ESCAPE:
 			_on_back_pressed()
@@ -688,7 +745,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				_start_playback()
 
 func _delete_selected_notes() -> void:
-	if not current_track or selected_notes.is_empty():
+	if current_track == null or selected_notes.is_empty():
 		return
 
 	var removed: Array = []
@@ -698,7 +755,7 @@ func _delete_selected_notes() -> void:
 
 	for item in removed:
 		var data: Dictionary = item as Dictionary
-		var n2 := _find_note_by_uid(int(data.get("uid", -1)))
+		var n2: TrackFormat.TrackNote = _find_note_by_uid(int(data.get("uid", -1)))
 		if n2 != null:
 			current_track.remove_note(n2)
 
@@ -717,61 +774,77 @@ func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 # ============================================================
-# PIANO ROLL DRAWING
+# PIANO ROLL DRAWING (MUSICAL GRID)
 # ============================================================
-
 func draw_piano_roll(canvas: CanvasItem) -> void:
-	if not current_track:
+	if current_track == null:
 		return
 
-	var size := piano_roll.size
-	var bg_color := Color(0.12, 0.12, 0.15)
-	var grid_color := Color(0.2, 0.2, 0.25)
-	var beat_color := Color(0.3, 0.3, 0.35)
-	var white_key_bg := Color(0.15, 0.15, 0.18)
-	var black_key_bg := Color(0.1, 0.1, 0.12)
+	var size: Vector2 = piano_roll.size
+	var bg_color: Color = Color(0.12, 0.12, 0.15)
+	var grid_sub_color: Color = Color(0.18, 0.18, 0.22)
+	var grid_beat_color: Color = Color(0.26, 0.26, 0.32)
+	var grid_measure_color: Color = Color(0.35, 0.35, 0.42)
+	var white_key_bg: Color = Color(0.15, 0.15, 0.18)
+	var black_key_bg: Color = Color(0.1, 0.1, 0.12)
+	var row_line_color: Color = Color(0.2, 0.2, 0.25)
 
 	canvas.draw_rect(Rect2(Vector2.ZERO, size), bg_color, true)
 
+	# Key rows
 	for i in range(KEY_COUNT):
-		var midi_note := MIDI_MAX - i
-		var y := i * zoom_y
-		var is_black := _is_black_key(midi_note)
-		var key_color := black_key_bg if is_black else white_key_bg
-		canvas.draw_rect(Rect2(0, y, size.x, zoom_y), key_color, true)
-		canvas.draw_line(Vector2(0, y), Vector2(size.x, y), grid_color, 1.0)
+		var midi_note: int = MIDI_MAX - i
+		var y: float = float(i) * zoom_y
+		var is_black: bool = _is_black_key(midi_note)
+		var key_color: Color = black_key_bg if is_black else white_key_bg
+		canvas.draw_rect(Rect2(0.0, y, size.x, zoom_y), key_color, true)
+		canvas.draw_line(Vector2(0.0, y), Vector2(size.x, y), row_line_color, 1.0)
 
-	var beat_duration := 60.0 / float(current_track.settings.bpm)
-	var visible_duration := size.x / zoom_x
-	var beat := 0
-	var time := 0.0
+	# Time grid: subdivision / beat / measure
+	var ts: Dictionary = _get_time_signature()
+	var beats_per_measure: int = int(ts["beats"])
+	var sub_duration: float = _get_grid_duration()
+	var visible_duration: float = size.x / zoom_x
 
-	while time < visible_duration:
-		var x := time * zoom_x
-		var is_measure := (beat % int(current_track.settings.time_signature[0])) == 0
-		var line_color := beat_color if is_measure else grid_color
-		var line_width := 2.0 if is_measure else 1.0
-		canvas.draw_line(Vector2(x, 0), Vector2(x, size.y), line_color, line_width)
-		beat += 1
-		time = beat * beat_duration
+	var sub_px: float = sub_duration * zoom_x
+	var draw_subdivisions: bool = sub_px >= 10.0
 
+	var subs_per_beat: int = max(1, grid_division)
+	var subs_per_measure: int = max(1, beats_per_measure * subs_per_beat)
+
+	var denom_guard: float = maxf(sub_duration, 0.0001)
+	var total_subs: int = int(ceil(visible_duration / denom_guard)) + 1
+
+	for s in range(total_subs):
+		var t: float = float(s) * sub_duration
+		var x: float = t * zoom_x
+
+		var is_measure: bool = (s % subs_per_measure) == 0
+		var is_beat: bool = (s % subs_per_beat) == 0
+
+		if is_measure:
+			canvas.draw_line(Vector2(x, 0.0), Vector2(x, size.y), grid_measure_color, 2.5)
+		elif is_beat:
+			canvas.draw_line(Vector2(x, 0.0), Vector2(x, size.y), grid_beat_color, 1.5)
+		elif draw_subdivisions:
+			canvas.draw_line(Vector2(x, 0.0), Vector2(x, size.y), grid_sub_color, 1.0)
+
+	# Notes + resize handle hint
 	for raw in current_track.notes:
 		var note: TrackFormat.TrackNote = raw
-		var note_x := float(note.time) * zoom_x
-		var note_y := float(MIDI_MAX - int(note.note)) * zoom_y
-		var note_w := maxf(float(note.duration) * zoom_x, 8.0)
-		var note_h := zoom_y - 2.0
+		var note_x: float = float(note.time) * zoom_x
+		var note_y: float = float(MIDI_MAX - int(note.note)) * zoom_y
+		var note_w: float = maxf(float(note.duration) * zoom_x, 8.0)
+		var note_h: float = zoom_y - 2.0
 
-		var is_selected := note in selected_notes
-		var hue := float(int(note.note) - MIDI_MIN) / float(KEY_COUNT) * 0.8
-		var note_color := Color.from_hsv(hue, 0.7, 0.9)
+		var is_selected: bool = note in selected_notes
+		var hue: float = float(int(note.note) - MIDI_MIN) / float(KEY_COUNT) * 0.8
+		var note_color: Color = Color.from_hsv(hue, 0.7, 0.9)
 		if is_selected:
 			note_color = Color(1.0, 1.0, 0.5)
 
 		canvas.draw_rect(Rect2(note_x, note_y + 1.0, note_w, note_h), note_color, true)
 		canvas.draw_rect(Rect2(note_x, note_y + 1.0, note_w, note_h), note_color.darkened(0.3), false, 1.0)
-
-		# Resize handle hint (small line at the end)
 		canvas.draw_line(
 			Vector2(note_x + note_w, note_y + 1.0),
 			Vector2(note_x + note_w, note_y + 1.0 + note_h),
@@ -779,10 +852,11 @@ func draw_piano_roll(canvas: CanvasItem) -> void:
 			1.0
 		)
 
+	# Playback cursor
 	if is_playing:
-		var cursor_x := playback_time * zoom_x
-		canvas.draw_line(Vector2(cursor_x, 0), Vector2(cursor_x, size.y), Color(1, 0.3, 0.3), 2.0)
+		var cursor_x: float = playback_time * zoom_x
+		canvas.draw_line(Vector2(cursor_x, 0.0), Vector2(cursor_x, size.y), Color(1, 0.3, 0.3), 2.0)
 
 func _is_black_key(midi_note: int) -> bool:
-	var note_in_octave := midi_note % 12
+	var note_in_octave: int = midi_note % 12
 	return note_in_octave in [1, 3, 6, 8, 10]
