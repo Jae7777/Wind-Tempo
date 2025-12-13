@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfrx85qxhx0yb"]
+
+[ext_resource type="Script" uid="uid://bu8fffp8vw572" path="res://note.gd" id="1_7hqtv"]
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_7w2tp"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_7hqtv")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("SeparationRayShape2D_7w2tp")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Area2D"]
