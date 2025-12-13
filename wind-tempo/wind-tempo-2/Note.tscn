@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://ph4vprioqokw"]
 
-[ext_resource type="Script" path="res://Note.gd" id="1_m01oh"]
+[ext_resource type="Script" uid="uid://dbl6cjvb6ntw4" path="res://Note.gd" id="1_m01oh"]
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_pmjlu"]
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_m01oh")
 
 [node name="Area2D" type="Area2D" parent="."]
-script = ExtResource("1_m01oh")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D"]
 
