@@ -36,3 +36,54 @@ func _unhandled_input(event):
 			check_for_hit(i)
 			get_viewport().set_input_as_handled() 
 			return
+
+func check_for_hit(lane_index: int):
+	
+	if lane_index >= hit_zones.size() or not is_instance_valid(hit_zones[lane_index]):
+		return
+
+	var hit_zone = hit_zones[lane_index]
+	
+	# Get all Area2D nodes (notes) currently overlapping the HitZone
+	var overlapping_notes: Array[Area2D] = hit_zone.get_overlapping_areas()
+	
+	if overlapping_notes.size() > 0:
+		# --- HIT SUCCESSFUL! ---
+		
+		var hit_note: Area2D = overlapping_notes[0]
+		
+		# 1. Determine hit accuracy
+		var hit_quality = calculate_accuracy(hit_note.position.y)
+		
+		# 2. Register hit and score based on quality
+		if has_node("/root/Point"):
+			Point.register_successful_hit(hit_quality) # Assumes Point.gd is updated
+		
+		print("HIT! Lane %d - Quality: %s" % [lane_index, hit_quality])
+		
+		# 3. Remove the note
+		hit_note.queue_free()
+		
+	else:
+		# --- HIT MISSED (Empty Press) ---
+		
+		if has_node("/root/Point"):
+			Point.register_miss()
+			
+		print("Empty press in lane %d. Combo Broken." % lane_index)
+
+func calculate_accuracy(note_y_pos: float) -> String:
+	
+	# Calculate the absolute distance from the note to the ideal hit position
+	var distance = abs(note_y_pos - IDEAL_HIT_Y_POS)
+	
+	if distance <= PERFECT_TOLERANCE:
+		return "PERFECT"
+	elif distance <= GREAT_TOLERANCE:
+		return "GREAT"
+	elif distance <= OK_TOLERANCE:
+		return "OK"
+	else:
+		# This case should ideally not happen if the HitZone collision is properly set 
+		# to match the max tolerance, but serves as a fail-safe.
+		return "BAD"
